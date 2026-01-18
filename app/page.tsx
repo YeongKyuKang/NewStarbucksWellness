@@ -62,12 +62,12 @@ const IMAGES = {
 
 const FULL_MENU_ITEMS: MenuItem[] = [
   // --- HEALTHY DRINK (6 Items) ---
-  { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6500, description: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
+  { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6000, description: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
   { id: 'd2', category: 'drink', name: "아보카도 밸런스 스무디", price: 7200, description: "아보카도와 바나나의 든든한 한 끼", tags: ["Meal"], color_class: "bg-lime-100 text-lime-800", img: "/avocado.png" },
   { id: 'd3', category: 'drink', name: "비니거 리프레시 에이드", price: 6200, description: "상큼한 사과 식초로 되찾는 활력", tags: ["Detox"], color_class: "bg-orange-50 text-orange-800", img: "/vinegar.png" },
-  { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 5800, description: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
-  { id: 'd5', category: 'drink', name: "콤부차 에이드", price: 5900, description: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
-  { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 5900, description: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
+  { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 6500, description: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
+  { id: 'd5', category: 'drink', name: "레몬 콤부차 에이드", price: 6200, description: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
+  { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 6500, description: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
 
   // --- FRESH FOOD (6 Items) ---
   { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, description: "수비드 닭가슴살과 퀴노아의 정석", tags: ["Vegetarian"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
