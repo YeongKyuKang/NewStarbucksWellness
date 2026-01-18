@@ -93,9 +93,9 @@ const GOODS: GoodsItem[] = [
 ];
 
 const PLANS = [
-  { id: 'newbie', name: "Wellness Newbie", price: "Free", color: "bg-stone-100 text-stone-900 border-stone-200", features: ["커뮤니티 2회 체험", "기본 배지 획득", "생일시 쿠폰 제공 (1회 체험권)"], recommended: false },
-  { id: 'semipro', name: "Wellness Semipro", price: "₩9,900", color: "bg-emerald-50 text-emerald-900 border-emerald-200", features: ["피드 무제한", "활동 무제한", "월 2회 무료 음료"], recommended: true },
-  { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 10회 무료 음료", "신메뉴 시음회"], recommended: false }
+  { id: 'newbie', name: "Wellness Newbie", price: "Free", color: "bg-stone-100 text-stone-900 border-stone-200", features: ["커뮤니티 2회 체험", "기본 배지 획득", "생일 쿠폰 제공 (커뮤니티 1회 체험권)"], recommended: false },
+  { id: 'semipro', name: "Wellness Semipro", price: "₩9,900", color: "bg-emerald-50 text-emerald-900 border-emerald-200", features: ["Drops 활성화","피드 무제한", "활동 무제한", "월 1회 무료 음료"], recommended: true },
+  { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 4회 무료 음료", "신메뉴 시음회"], recommended: false }
 ];
 
 // -----------------------------------------------------------------------------
@@ -401,7 +401,7 @@ const HomeSection = ({ setActiveTab, userTier, userName, onLoginClick }: any) =>
         </div>
         <div>
           <SectionHeader title="Thrive Together" sub="지금 가장 핫한 오프라인 모임" linkText="전체보기" onClick={() => setActiveTab('community')} />
-          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "루프탑 요가", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "나이트 러닝", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "딥 워크", time: "Mon 19:00", img: IMAGES.activity_study, loc: "더명동R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
+          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "Saturday Morning Yoga", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "Wednesday Thrive Run", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "Wednesday Cooking Group", time: "Wed 19:00", img: IMAGES.activity_study, loc: "더명동R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
         </div>
       </div>
     </div>
