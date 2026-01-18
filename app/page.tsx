@@ -26,9 +26,9 @@ type ToastType = 'success' | 'error' | 'info';
 
 type MenuItem = {
   id: string;
-  category: 'drink' | 'food' | 'salad';
+  category: 'drink' | 'food'; 
   name: string;
-  desc: string;
+  description: string; 
   tags: string[];
   color_class: string;
   img: string;
@@ -62,27 +62,27 @@ const IMAGES = {
 
 const FULL_MENU_ITEMS: MenuItem[] = [
   // --- HEALTHY DRINK (6 Items) ---
-  { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6500, desc: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
-  { id: 'd2', category: 'drink', name: "아보카도 밸런스 스무디", price: 7200, desc: "아보카도와 바나나의 든든한 한 끼", tags: ["Meal"], color_class: "bg-lime-100 text-lime-800", img: "/avocado.png" },
-  { id: 'd3', category: 'drink', name: "비니거 리프레시 에이드", price: 6200, desc: "상큼한 사과 식초로 되찾는 활력", tags: ["Detox"], color_class: "bg-orange-50 text-orange-800", img: "/vinegar.png" },
-  { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 5800, desc: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
-  { id: 'd5', category: 'drink', name: "콤부차 에이드", price: 5900, desc: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
-  { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 5900, desc: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
+  { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6500, description: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
+  { id: 'd2', category: 'drink', name: "아보카도 밸런스 스무디", price: 7200, description: "아보카도와 바나나의 든든한 한 끼", tags: ["Meal"], color_class: "bg-lime-100 text-lime-800", img: "/avocado.png" },
+  { id: 'd3', category: 'drink', name: "비니거 리프레시 에이드", price: 6200, description: "상큼한 사과 식초로 되찾는 활력", tags: ["Detox"], color_class: "bg-orange-50 text-orange-800", img: "/vinegar.png" },
+  { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 5800, description: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
+  { id: 'd5', category: 'drink', name: "콤부차 에이드", price: 5900, description: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
+  { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 5900, description: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
 
   // --- FRESH FOOD (6 Items) ---
-  { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, desc: "수비드 닭가슴살과 퀴노아의 정석", tags: ["Vegetarian"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
-  { id: 'f2', category: 'food', name: "프레쉬 연어 샐러드", price: 10900, desc: "오메가3 가득한 생연어 포케", tags: ["Omega 3"], color_class: "bg-orange-50 text-orange-800", img: "/salmon.png" },
-  { id: 'f3', category: 'food', name: "바질 치킨 샐러드", price: 9500, desc: "향긋한 바질 페스토와 리코타 치즈", tags: ["High-Protein"], color_class: "bg-emerald-50 text-black-800", img: "/basil-chicken.png" },
-  { id: 'f4', category: 'food', name: "아보카도 베지 샌드위치", price: 8500, desc: "단호박과 에그, 아보카도의 조화", tags: ["Vegetarian"], color_class: "bg-yellow-50 text-yellow-800", img: "/avocado-sandwich.png" },
-  { id: 'f5', category: 'food', name: "치킨 클럽 샌드위치", price: 9200, desc: "통밀빵에 꽉 채운 닭가슴살과 채소", tags: ["High-Protein"], color_class: "bg-stone-100 text-white-800", img: "/chicken-club.png" },
-  { id: 'f6', category: 'food', name: "아사이 파워 볼", price: 8800, desc: "항산화 가득 아사이베리와 그래놀라", tags: ["Signature"], color_class: "bg-purple-50 text-purple-800", img: "/acai-bowl.png" },
+  { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, description: "수비드 닭가슴살과 퀴노아의 정석", tags: ["Vegetarian"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
+  { id: 'f2', category: 'food', name: "프레쉬 연어 샐러드", price: 10900, description: "오메가3 가득한 생연어 포케", tags: ["Omega 3"], color_class: "bg-orange-50 text-orange-800", img: "/salmon.png" },
+  { id: 'f3', category: 'food', name: "바질 치킨 샐러드", price: 9500, description: "향긋한 바질 페스토와 리코타 치즈", tags: ["High-Protein"], color_class: "bg-emerald-50 text-black-800", img: "/basil-chicken.png" },
+  { id: 'f4', category: 'food', name: "아보카도 베지 샌드위치", price: 8500, description: "단호박과 에그, 아보카도의 조화", tags: ["Vegetarian"], color_class: "bg-yellow-50 text-yellow-800", img: "/avocado-sandwich.png" },
+  { id: 'f5', category: 'food', name: "치킨 클럽 샌드위치", price: 9200, description: "통밀빵에 꽉 채운 닭가슴살과 채소", tags: ["High-Protein"], color_class: "bg-stone-100 text-white-800", img: "/chicken-club.png" },
+  { id: 'f6', category: 'food', name: "아사이 파워 볼", price: 8800, description: "항산화 가득 아사이베리와 그래놀라", tags: ["Signature"], color_class: "bg-purple-50 text-purple-800", img: "/acai-bowl.png" },
   
 ];
 
 const STORES = [
   { id: 1, name: "Thrive 강남 스테이션", distance: "120m", status: "혼잡", tag: "도심 속 힐링", color: "red" },
   { id: 2, name: "Thrive 한강 공원", distance: "2.4km", status: "여유", tag: "러닝 크루 핫플", color: "green" },
-  { id: 3, name: "Thrive 더종로 R", distance: "5.1km", status: "보통", tag: "쿠킹 성지", color: "yellow" },
+  { id: 3, name: "Thrive 더명동R", distance: "5.1km", status: "보통", tag: "쿠킹 성지", color: "yellow" },
   { id: 4, name: "Thrive 북한산 포레스트", distance: "12km", status: "여유", tag: "숲 속 요가", color: "green" },
 ];
 
@@ -97,6 +97,7 @@ const PLANS = [
   { id: 'semipro', name: "Wellness Semipro", price: "₩9,900", color: "bg-emerald-50 text-emerald-900 border-emerald-200", features: ["피드 무제한", "활동 무제한", "월 2회 무료 음료"], recommended: true },
   { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 10회 무료 음료", "신메뉴 시음회"], recommended: false }
 ];
+
 // -----------------------------------------------------------------------------
 // 3. SHARED COMPONENTS
 // -----------------------------------------------------------------------------
@@ -157,19 +158,20 @@ const ToastContainer = ({ toasts }: { toasts: any[] }) => {
 // 4. MODAL COMPONENTS
 // -----------------------------------------------------------------------------
 
-// Feed Detail Modal (NEW!)
+// Feed Detail Modal
 const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
   if (!isOpen || !post) return null;
   return (
-    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4">
+    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
       <motion.div 
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+        onClick={(e) => e.stopPropagation()}
         className="bg-white w-full max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-2xl relative flex flex-col overflow-hidden"
       >
          {/* Header */}
          <div className="p-4 border-b flex justify-between items-center bg-white z-10 shrink-0">
             <div className="flex items-center gap-3">
-              <img src={IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" />
+              <img src={post.userImg || IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" />
               <div>
                 <div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div>
                 <div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleString()}</div>
@@ -228,7 +230,7 @@ const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
 };
 
 // Store Selector (Bottom Sheet)
-const StoreSelector = ({ isOpen, onClose, currentStore, onSelect }: any) => {
+const StoreSelector = ({ isOpen, onClose, currentStore, onSelect, stores }: any) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
@@ -236,9 +238,9 @@ const StoreSelector = ({ isOpen, onClose, currentStore, onSelect }: any) => {
         <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mb-6"></div>
         <div className="flex justify-between items-center mb-6"><h2 className="text-xl font-bold text-stone-900">매장 선택</h2><button onClick={onClose}><X className="text-stone-400" /></button></div>
         <div className="space-y-3">
-          {STORES.map((store) => (
-            <div key={store.id} onClick={() => { onSelect(store); onClose(); }} className={`p-4 rounded-2xl border flex items-center justify-between cursor-pointer transition-all ${currentStore.id === store.id ? 'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500' : 'border-stone-100 bg-white hover:bg-stone-50'}`}>
-              <div><div className="flex items-center gap-2 mb-1"><h3 className="font-bold text-stone-900">{store.name}</h3>{currentStore.id === store.id && <CheckCircle className="w-4 h-4 text-emerald-600" />}</div><div className="flex items-center gap-2 text-xs text-stone-500"><MapPin className="w-3 h-3" /> {store.distance}<span className="w-0.5 h-3 bg-stone-300"></span><span className={`${store.color === 'red' ? 'text-red-500' : store.color === 'green' ? 'text-emerald-500' : 'text-yellow-600'} font-bold`}>{store.status}</span></div></div>
+          {stores.map((store: any) => (
+            <div key={store.id} onClick={() => { onSelect(store); onClose(); }} className={`p-4 rounded-2xl border flex items-center justify-between cursor-pointer transition-all ${currentStore?.id === store.id ? 'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500' : 'border-stone-100 bg-white hover:bg-stone-50'}`}>
+              <div><div className="flex items-center gap-2 mb-1"><h3 className="font-bold text-stone-900">{store.name}</h3>{currentStore?.id === store.id && <CheckCircle className="w-4 h-4 text-emerald-600" />}</div><div className="flex items-center gap-2 text-xs text-stone-500"><MapPin className="w-3 h-3" /> {store.distance}<span className="w-0.5 h-3 bg-stone-300"></span><span className={`${store.color === 'red' ? 'text-red-500' : store.color === 'green' ? 'text-emerald-500' : 'text-yellow-600'} font-bold`}>{store.status}</span></div></div>
               <span className="text-[10px] bg-stone-100 text-stone-600 px-2 py-1 rounded-full font-bold">{store.tag}</span>
             </div>
           ))}
@@ -258,7 +260,7 @@ const PaymentModal = ({ isOpen, onClose, planName, price, onConfirm }: any) => {
       setProcessing(false);
       onConfirm();
       onClose();
-    }, 2000); // 2초 딜레이
+    }, 2000); 
   };
 
   if (!isOpen) return null;
@@ -348,7 +350,7 @@ const StarbucksAuthModal = ({ isOpen, onClose, onLoginSuccess, addToast }: any) 
       setLoading(false);
       onLoginSuccess(); 
       onClose();
-      addToast("스벅이님, 환영합니다!", "success");
+      addToast("강민지님, 환영합니다!", "success");
     }, 1500);
   };
   if (!isOpen) return null;
@@ -399,7 +401,7 @@ const HomeSection = ({ setActiveTab, userTier, userName, onLoginClick }: any) =>
         </div>
         <div>
           <SectionHeader title="Thrive Together" sub="지금 가장 핫한 오프라인 모임" linkText="전체보기" onClick={() => setActiveTab('community')} />
-          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "Sunday Morning Yoga", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "Saturday Thrive Run", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "Wednesday Cooking Group", time: "Mon 19:00", img: IMAGES.activity_study, loc: "더종로R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
+          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "루프탑 요가", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "나이트 러닝", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "딥 워크", time: "Mon 19:00", img: IMAGES.activity_study, loc: "더명동R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
         </div>
       </div>
     </div>
@@ -418,17 +420,13 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: an
         <AnimatePresence mode='popLayout'>
           {filteredItems.map((item: MenuItem) => (
             <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="group bg-white border border-stone-100 rounded-3xl p-4 shadow-sm hover:shadow-md transition-all flex gap-4 overflow-hidden cursor-pointer">
-              {/* Image */}
               <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-50"><img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={item.name} /></div>
-              
-              {/* Content - Changed to Flex Column to separate Price and Button */}
               <div className="flex-1 flex flex-col justify-between z-10">
                 <div>
                   <div className="flex gap-2 mb-1">{item.tags?.map((tag: string) => (<span key={tag} className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.color_class.replace('text-', 'bg-').replace('100', '50')} ${item.color_class}`}>{tag}</span>))}</div>
                   <h3 className="font-bold text-lg text-stone-800 leading-tight mb-1">{item.name}</h3>
-                  <p className="text-xs text-stone-500 line-clamp-1 mb-2">{item.desc}</p>
+                  <p className="text-xs text-stone-500 line-clamp-1 mb-2">{item.description}</p>
                 </div>
-                
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-base text-stone-900">₩{item.price.toLocaleString()}</span>
                   <button onClick={(e) => { 
@@ -479,7 +477,7 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
       {view === 'meetups' && (
         <div className="p-6 space-y-6 animate-in fade-in duration-300">
           {!isGuest && userTier === 'newbie' && (<div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-start gap-3 mb-2"><Ticket className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" /><div><h4 className="font-bold text-emerald-900 text-sm">Newbie 체험권 잔여: {newbieTickets}회</h4><p className="text-xs text-emerald-700 mt-1">{newbieTickets > 0 ? "체험권 소진 후에는 멤버십 업그레이드가 필요합니다." : "체험권 소진. 업그레이드 필요"}</p></div></div>)}
-          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={meetup.img || IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { if(isGuest) addToast("로그인이 필요합니다.", "error"); else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); else { addToast("참여 신청 완료! +10 Drops", "success"); earnDrops(10); } }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
+          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={meetup.img || IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { if(isGuest) addToast("로그인이 필요합니다.", "error"); else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); else if(userTier === 'newbie') addToast("참여 신청 완료! (Newbie는 Drops가 적립되지 않습니다)", "info"); else { addToast("참여 신청 완료! +10 Drops", "success"); earnDrops(10); } }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
         </div>
       )}
       {view === 'feed' && (
@@ -488,7 +486,7 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
           <div className={`divide-y divide-stone-100 animate-in fade-in duration-300 ${isFeedLocked ? 'blur-sm select-none overflow-hidden h-[500px]' : ''}`}>
             {posts.map((post: any, idx: number) => (
               <div key={post.id} onClick={() => setSelectedPost(post)} className="p-6 cursor-pointer hover:bg-stone-50 transition-colors">
-                <div className="flex justify-between items-start mb-3"><div className="flex items-center gap-3"><img src={IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" /><div><div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div><div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleDateString()}</div></div></div><span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span></div>
+                <div className="flex justify-between items-start mb-3"><div className="flex items-center gap-3"><img src={post.userImg || IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" /><div><div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div><div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleDateString()}</div></div></div><span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span></div>
                 <p className="text-stone-800 text-sm mb-3 leading-relaxed line-clamp-3">{post.content}</p>
                 {/* Images */} {renderImages(post.images)} 
                 <div className="flex items-center gap-4 mt-3"><button className="flex items-center gap-1 text-stone-500 hover:text-red-500"><Heart className="w-5 h-5" /><span className="text-xs font-medium">{post.likes}</span></button><button className="flex items-center gap-1 text-stone-500"><Share2 className="w-5 h-5" /></button></div>
@@ -604,15 +602,40 @@ export default function ThriveApp() {
   useEffect(() => {
     // Initial Fallback Data with Fixed Images
     const fallbackMeetups = [
-       { id: 1, title: "Sunday Morning Yoga", type: "Wellness", location: "강남점", meet_time: "Sat 08:00", participants_current: 12, participants_max: 20, img: IMAGES.activity_yoga },
-       { id: 2, title: "Saturday Thrive Run", type: "Activity", location: "광화문", meet_time: "Wed 20:00", participants_current: 8, participants_max: 20, img: IMAGES.activity_run },
-       { id: 3, title: "Wednesday Cooking Group", type: "Activity", location: "더종로R", meet_time: "Mon 19:00", participants_current: 4, participants_max: 8, img: IMAGES.activity_study }
+       { id: 1, title: "Saturday Morning Yoga", type: "Wellness", location: "강남점", meet_time: "Sat 08:00", participants_current: 12, participants_max: 20, img: IMAGES.activity_yoga },
+       { id: 2, title: "Wednesday Thrive Run", type: "Activity", location: "광화문", meet_time: "Wed 20:00", participants_current: 8, participants_max: 20, img: IMAGES.activity_run },
+       { id: 3, title: "Wednesday Cooking Group", type: "Activity", location: "더명동R", meet_time: "Wed 19:00", participants_current: 4, participants_max: 8, img: IMAGES.activity_study }
     ];
-    // New Post with 3 Images (Instagram Style)
+    // New Post with 3 Images (Instagram Style) & Custom User Profile Images
     const fallbackPosts = [
-       { id: 99, username: "JinHyeon Jeon", content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", likes: 42, badge: "Runner", images: ["/feed1.jpg", "/feed2.jpg", "/feed3.jpg"], created_at: new Date().toISOString() },
-       { id: 1, username: "Minji", content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", likes: 12, badge: "Runner", created_at: new Date().toISOString() },
-       { id: 2, username: "Kai", content: "말차 맛있다. 집중력 최고!", likes: 5, badge: "Newbie", created_at: new Date().toISOString() }
+       { 
+         id: 99, 
+         username: "Healthy_Life", 
+         userImg: "jeon.jpg",
+         content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", 
+         likes: 42, 
+         badge: "Runner", 
+         images: ["feed1.jpg", "feed2.jpg", "feed3.jpg"], 
+         created_at: new Date().toISOString() 
+       },
+       { 
+         id: 1, 
+         username: "Minji", 
+         userImg: "jeon2.jpg",
+         content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", 
+         likes: 12, 
+         badge: "Runner", 
+         created_at: new Date().toISOString() 
+       },
+       { 
+         id: 2, 
+         username: "Kai", 
+         userImg: "jeon3.jpg",
+         content: "말차 맛있다. 집중력 최고!", 
+         likes: 5, 
+         badge: "Newbie", 
+         created_at: new Date().toISOString() 
+       }
     ];
     
     setMeetups(fallbackMeetups);
@@ -650,7 +673,7 @@ export default function ThriveApp() {
   const handleSSOLogin = async () => {
     const demoProfile = { 
         id: "demo_user_minji", 
-        username: "스벅이", 
+        username: "강민지", 
         tier: "newbie", 
         tickets: 2, 
         drops: 0 
@@ -702,7 +725,7 @@ export default function ThriveApp() {
   const earnDrops = (amount: number) => {
     if (!session) return;
     if (localTier === 'newbie') {
-       addToast("Newbie 등급은 Drops가 적립되지 않습니다.", "info");
+       // Note: Toast handled in specific actions to be context-aware
        return;
     }
     setLocalDrops(prev => prev + amount);
