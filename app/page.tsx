@@ -7,7 +7,7 @@ import {
   Leaf, Users, Trophy, Coffee, Heart, ArrowRight, Activity, 
   Star, CheckCircle, Menu, X, Share2, MapPin, Clock, Zap, 
   BookOpen, Sun, Crown, Ticket, ShoppingBag, Lock, LogOut, User, ChevronRight, Flame, ChevronLeft,
-  Utensils, Carrot, ChevronDown, AlertCircle, Check, CreditCard, Gift, Store, Trash2, Plus
+  Utensils, Carrot, ChevronDown, AlertCircle, Check, CreditCard, Gift, Store, Trash2, Plus, MessageCircle
 } from 'lucide-react';
 
 // -----------------------------------------------------------------------------
@@ -26,7 +26,7 @@ type ToastType = 'success' | 'error' | 'info';
 
 type MenuItem = {
   id: string;
-  category: 'drink' | 'food'; // salad & food merged into 'food' for Fresh Food
+  category: 'drink' | 'food' | 'salad';
   name: string;
   desc: string;
   tags: string[];
@@ -47,38 +47,35 @@ type GoodsItem = {
 // 2. MOCK DATA & ASSETS
 // -----------------------------------------------------------------------------
 
-// Hero & Activity Images (Unsplash 유지)
 const IMAGES = {
   hero_main: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1000&auto=format&fit=crop", 
   hero_run: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?q=80&w=800&auto=format&fit=crop", 
   hero_order: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", 
   activity_yoga: "/yoga.jpg",
   activity_run: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=600&auto=format&fit=crop",
-  activity_study: "/cooking.jpg",
+  activity_study: "cooking.jpg",
   avatar_def: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
   goods_mat: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?q=80&w=400&auto=format&fit=crop",
   goods_tumbler: "https://images.unsplash.com/photo-1516442719524-a603408c90cb?q=80&w=400&auto=format&fit=crop",
   goods_bag: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=400&auto=format&fit=crop",
 };
 
-// ⭐️ NEW MENU LIST (Reflecting User Request)
-// public 폴더에 아래 파일명으로 이미지를 저장해주세요! (확장자 주의)
 const FULL_MENU_ITEMS: MenuItem[] = [
   // --- HEALTHY DRINK (6 Items) ---
   { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6500, desc: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
   { id: 'd2', category: 'drink', name: "아보카도 밸런스 스무디", price: 7200, desc: "아보카도와 바나나의 든든한 한 끼", tags: ["Meal"], color_class: "bg-lime-100 text-lime-800", img: "/avocado.png" },
   { id: 'd3', category: 'drink', name: "비니거 리프레시 에이드", price: 6200, desc: "상큼한 사과 식초로 되찾는 활력", tags: ["Detox"], color_class: "bg-orange-50 text-orange-800", img: "/vinegar.png" },
   { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 5800, desc: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
-  { id: 'd5', category: 'drink', name: "콤부차 에이드", price: 5900, desc: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
+  { id: 'd5', category: 'drink', name: "콤부차 에이드", price: 5900, desc: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
   { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 5900, desc: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
 
   // --- FRESH FOOD (6 Items) ---
-  { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, desc: "수비드 닭가슴살과 퀴노아의 정석", tags: ["High Protein"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
+  { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, desc: "수비드 닭가슴살과 퀴노아의 정석", tags: ["Vegetarian"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
   { id: 'f2', category: 'food', name: "프레쉬 연어 샐러드", price: 10900, desc: "오메가3 가득한 생연어 포케", tags: ["Omega 3"], color_class: "bg-orange-50 text-orange-800", img: "/salmon.png" },
-  { id: 'f3', category: 'food', name: "바질 치킨 샐러드", price: 9500, desc: "향긋한 바질 페스토와 리코타 치즈", tags: ["Fresh"], color_class: "bg-emerald-50 text-emerald-800", img: "/basil-chicken.png" },
+  { id: 'f3', category: 'food', name: "바질 치킨 샐러드", price: 9500, desc: "향긋한 바질 페스토와 리코타 치즈", tags: ["High-Protein"], color_class: "bg-emerald-50 text-black-800", img: "/basil-chicken.png" },
   { id: 'f4', category: 'food', name: "아보카도 베지 샌드위치", price: 8500, desc: "단호박과 에그, 아보카도의 조화", tags: ["Vegetarian"], color_class: "bg-yellow-50 text-yellow-800", img: "/avocado-sandwich.png" },
-  { id: 'f5', category: 'food', name: "치킨 클럽 샌드위치", price: 9200, desc: "통밀빵에 꽉 채운 닭가슴살과 채소", tags: ["Balanced"], color_class: "bg-stone-100 text-stone-800", img: "/chicken-club.png" },
-  { id: 'f6', category: 'food', name: "아사이 파워 볼", price: 8800, desc: "항산화 가득 아사이베리와 그래놀라", tags: ["Superfood"], color_class: "bg-purple-50 text-purple-800", img: "/acai-bowl.png" },
+  { id: 'f5', category: 'food', name: "치킨 클럽 샌드위치", price: 9200, desc: "통밀빵에 꽉 채운 닭가슴살과 채소", tags: ["High-Protein"], color_class: "bg-stone-100 text-white-800", img: "/chicken-club.png" },
+  { id: 'f6', category: 'food', name: "아사이 파워 볼", price: 8800, desc: "항산화 가득 아사이베리와 그래놀라", tags: ["Signature"], color_class: "bg-purple-50 text-purple-800", img: "/acai-bowl.png" },
   
 ];
 
@@ -96,11 +93,10 @@ const GOODS: GoodsItem[] = [
 ];
 
 const PLANS = [
-  { id: 'newbie', name: "Wellness Newbie", price: "Free", color: "bg-stone-100 text-stone-900 border-stone-200", features: ["커뮤니티 2회 체험", "기본 배지 획득"], recommended: false },
+  { id: 'newbie', name: "Wellness Newbie", price: "Free", color: "bg-stone-100 text-stone-900 border-stone-200", features: ["커뮤니티 2회 체험", "기본 배지 획득", "생일시 쿠폰 제공 (1회 체험권)"], recommended: false },
   { id: 'semipro', name: "Wellness Semipro", price: "₩9,900", color: "bg-emerald-50 text-emerald-900 border-emerald-200", features: ["피드 무제한", "활동 무제한", "월 2회 무료 음료"], recommended: true },
   { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 10회 무료 음료", "신메뉴 시음회"], recommended: false }
 ];
-
 // -----------------------------------------------------------------------------
 // 3. SHARED COMPONENTS
 // -----------------------------------------------------------------------------
@@ -160,6 +156,76 @@ const ToastContainer = ({ toasts }: { toasts: any[] }) => {
 // -----------------------------------------------------------------------------
 // 4. MODAL COMPONENTS
 // -----------------------------------------------------------------------------
+
+// Feed Detail Modal (NEW!)
+const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
+  if (!isOpen || !post) return null;
+  return (
+    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4">
+      <motion.div 
+        initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+        className="bg-white w-full max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-2xl relative flex flex-col overflow-hidden"
+      >
+         {/* Header */}
+         <div className="p-4 border-b flex justify-between items-center bg-white z-10 shrink-0">
+            <div className="flex items-center gap-3">
+              <img src={IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" />
+              <div>
+                <div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div>
+                <div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleString()}</div>
+              </div>
+            </div>
+            <button onClick={onClose}><X className="text-stone-400 hover:text-stone-800" /></button>
+         </div>
+
+         {/* Scrollable Content */}
+         <div className="flex-1 overflow-y-auto p-0 scrollbar-hide">
+            {/* Images */}
+            {post.images && post.images.length > 0 && (
+               <div className="w-full">
+                 {post.images.map((img: string, idx: number) => (
+                    <img key={idx} src={img} className="w-full h-auto object-cover border-b border-stone-100" />
+                 ))}
+               </div>
+            )}
+            {/* Content */}
+            <div className="p-5">
+               <div className="flex gap-2 mb-3">
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span>
+               </div>
+               <p className="text-stone-800 text-sm leading-relaxed mb-6 whitespace-pre-wrap">{post.content}</p>
+
+               {/* Stats */}
+               <div className="flex items-center gap-6 border-t border-stone-100 pt-4">
+                  <button className="flex items-center gap-1.5 text-stone-600 hover:text-red-500 transition-colors"><Heart className="w-5 h-5" /><span className="text-sm font-bold">{post.likes}</span></button>
+                  <button className="flex items-center gap-1.5 text-stone-600"><MessageCircle className="w-5 h-5" /><span className="text-sm font-bold">12</span></button>
+                  <button className="flex items-center gap-1.5 text-stone-600 ml-auto"><Share2 className="w-5 h-5" /></button>
+               </div>
+
+               {/* Mock Comments */}
+               <div className="mt-6 space-y-4">
+                  <h4 className="font-bold text-sm text-stone-900">댓글</h4>
+                  <div className="flex gap-3">
+                     <div className="w-8 h-8 rounded-full bg-stone-200 flex-shrink-0 flex items-center justify-center text-xs font-bold text-stone-500">HL</div>
+                     <div>
+                        <div className="text-xs font-bold text-stone-800">Health_Lover</div>
+                        <p className="text-xs text-stone-600">와 사진 너무 예뻐요! 어디인가요?</p>
+                     </div>
+                  </div>
+                  <div className="flex gap-3">
+                     <div className="w-8 h-8 rounded-full bg-stone-200 flex-shrink-0 flex items-center justify-center text-xs font-bold text-stone-500">RM</div>
+                     <div>
+                        <div className="text-xs font-bold text-stone-800">Running_Man</div>
+                        <p className="text-xs text-stone-600">오늘 날씨 진짜 좋았죠 🔥</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </motion.div>
+    </div>
+  );
+};
 
 // Store Selector (Bottom Sheet)
 const StoreSelector = ({ isOpen, onClose, currentStore, onSelect }: any) => {
@@ -333,7 +399,7 @@ const HomeSection = ({ setActiveTab, userTier, userName, onLoginClick }: any) =>
         </div>
         <div>
           <SectionHeader title="Thrive Together" sub="지금 가장 핫한 오프라인 모임" linkText="전체보기" onClick={() => setActiveTab('community')} />
-          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "루프탑 요가", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "나이트 러닝", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "쿠킹", time: "Mon 19:00", img: IMAGES.activity_study, loc: "더종로R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
+          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x px-1">{[{ title: "Sunday Morning Yoga", time: "Sat 08:00", img: IMAGES.activity_yoga, loc: "강남점" }, { title: "Saturday Thrive Run", time: "Wed 20:00", img: IMAGES.activity_run, loc: "광화문" }, { title: "Wednesday Cooking Group", time: "Mon 19:00", img: IMAGES.activity_study, loc: "더종로R" }].map((act, idx) => (<div key={idx} className="min-w-[160px] snap-center relative rounded-2xl overflow-hidden aspect-[4/3] group cursor-pointer shadow-md" onClick={() => setActiveTab('community')}><img src={act.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={act.title} /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div><div className="absolute bottom-3 left-3 right-3"><div className="font-bold text-sm text-white drop-shadow-md">{act.title}</div><div className="text-[10px] text-stone-300 flex items-center gap-1"><MapPin className="w-3 h-3"/> {act.loc}</div></div></div>))}</div>
         </div>
       </div>
     </div>
@@ -341,24 +407,28 @@ const HomeSection = ({ setActiveTab, userTier, userName, onLoginClick }: any) =>
 };
 
 // [TAB 2] Menu
-const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest }: { addToast: Function, addToCart: Function, onLoginRequest: Function, isGuest: boolean }) => {
+const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: any) => {
   const [category, setCategory] = useState('drink');
-  const filteredItems = FULL_MENU_ITEMS.filter(item => item.category === category);
+  const filteredItems = items.filter((item: MenuItem) => item.category === category);
   return (
     <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
       <SectionHeader title="Health F&B" sub="당신의 컨디션을 위한 맞춤 설계" />
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar">{[{ id: 'drink', label: 'Healthy Drink', icon: <Coffee className="w-4 h-4"/> }, { id: 'food', label: 'Fresh Food', icon: <Utensils className="w-4 h-4"/> }].map(tab => (<button key={tab.id} onClick={() => setCategory(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${category === tab.id ? 'bg-emerald-800 text-white shadow-md' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'}`}>{tab.icon} {tab.label}</button>))}</div>
       <div className="grid gap-6">
         <AnimatePresence mode='popLayout'>
-          {filteredItems.map((item) => (
+          {filteredItems.map((item: MenuItem) => (
             <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="group bg-white border border-stone-100 rounded-3xl p-4 shadow-sm hover:shadow-md transition-all flex gap-4 overflow-hidden cursor-pointer">
+              {/* Image */}
               <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-50"><img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={item.name} /></div>
+              
+              {/* Content - Changed to Flex Column to separate Price and Button */}
               <div className="flex-1 flex flex-col justify-between z-10">
                 <div>
                   <div className="flex gap-2 mb-1">{item.tags?.map((tag: string) => (<span key={tag} className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.color_class.replace('text-', 'bg-').replace('100', '50')} ${item.color_class}`}>{tag}</span>))}</div>
                   <h3 className="font-bold text-lg text-stone-800 leading-tight mb-1">{item.name}</h3>
                   <p className="text-xs text-stone-500 line-clamp-1 mb-2">{item.desc}</p>
                 </div>
+                
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-base text-stone-900">₩{item.price.toLocaleString()}</span>
                   <button onClick={(e) => { 
@@ -382,24 +452,48 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest }: { addToas
 };
 
 // [TAB 3] Community
-const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops }: any) => {
+const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops, setSelectedPost }: any) => {
   const [view, setView] = useState('meetups');
   const isGuest = userTier === 'guest';
   const isFeedLocked = userTier === 'newbie' || isGuest;
+  
+  // 3-Grid Layout for 3 Images
+  const renderImages = (images: string[]) => {
+      if (!images || images.length === 0) return null;
+      if (images.length === 1) return <img src={images[0]} className="w-full h-64 object-cover rounded-xl mt-3" />;
+      if (images.length === 3) {
+          return (
+              <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden h-64">
+                  <img src={images[0]} className="col-span-2 w-full h-32 object-cover" />
+                  <img src={images[1]} className="w-full h-32 object-cover" />
+                  <img src={images[2]} className="w-full h-32 object-cover" />
+              </div>
+          )
+      }
+      return <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden"><img src={images[0]} className="w-full h-40 object-cover" /><img src={images[1]} className="w-full h-40 object-cover" /></div>
+  };
+
   return (
     <div className="pb-24 animate-in slide-in-from-right-4 duration-500 relative">
       <div className="sticky top-0 bg-white/95 backdrop-blur z-20 pt-4 border-b border-stone-100"><div className="px-6 mb-4"><h2 className="text-2xl font-bold text-stone-900">Thrive Together</h2><p className="text-stone-500 text-sm">함께 성장하는 커뮤니티</p></div><div className="flex px-6 gap-6"><button onClick={() => setView('meetups')} className={`pb-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-1 ${view === 'meetups' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>모임 & 활동 <Badge color="bg-orange-100" textColor="text-orange-600">New</Badge></button><button onClick={() => setView('feed')} className={`pb-3 text-sm font-bold border-b-2 transition-colors ${view === 'feed' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>소셜 피드</button></div></div>
       {view === 'meetups' && (
         <div className="p-6 space-y-6 animate-in fade-in duration-300">
           {!isGuest && userTier === 'newbie' && (<div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-start gap-3 mb-2"><Ticket className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" /><div><h4 className="font-bold text-emerald-900 text-sm">Newbie 체험권 잔여: {newbieTickets}회</h4><p className="text-xs text-emerald-700 mt-1">{newbieTickets > 0 ? "체험권 소진 후에는 멤버십 업그레이드가 필요합니다." : "체험권 소진. 업그레이드 필요"}</p></div></div>)}
-          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { if(isGuest) addToast("로그인이 필요합니다.", "error"); else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); else { addToast("참여 신청 완료! +10 Drops", "success"); earnDrops(10); } }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
+          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={meetup.img || IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { if(isGuest) addToast("로그인이 필요합니다.", "error"); else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); else { addToast("참여 신청 완료! +10 Drops", "success"); earnDrops(10); } }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
         </div>
       )}
       {view === 'feed' && (
         <div className="relative">
           {isFeedLocked && (<div className="absolute inset-0 z-30 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center h-[500px]"><div className="bg-stone-900 text-white p-4 rounded-full mb-4 shadow-xl"><Lock className="w-8 h-8" /></div><h3 className="text-xl font-bold text-stone-900 mb-2">{isGuest ? "로그인 필요" : "Semipro 멤버 전용"}</h3><p className="text-stone-600 text-sm mb-6">{isGuest ? "커뮤니티를 보려면 로그인해주세요." : "소셜 피드는 Semipro 등급부터 이용 가능합니다."}</p><button onClick={() => addToast(isGuest ? "상단 로그인 버튼을 이용해주세요." : "멤버십 탭에서 업그레이드 가능합니다.", "info")} className="bg-emerald-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg">{isGuest ? "로그인하기" : "업그레이드"}</button></div>)}
           <div className={`divide-y divide-stone-100 animate-in fade-in duration-300 ${isFeedLocked ? 'blur-sm select-none overflow-hidden h-[500px]' : ''}`}>
-            {posts.map((post: any, idx: number) => (<div key={post.id} className="p-6"><div className="flex justify-between items-start mb-3"><div className="flex items-center gap-3"><img src={IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" /><div><div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div><div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleDateString()}</div></div></div><span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span></div><p className="text-stone-800 text-sm mb-3 leading-relaxed">{post.content}</p><div className="flex items-center gap-4"><button className="flex items-center gap-1 text-stone-500 hover:text-red-500"><Heart className="w-5 h-5" /><span className="text-xs font-medium">{post.likes}</span></button><button className="flex items-center gap-1 text-stone-500"><Share2 className="w-5 h-5" /></button></div></div>))}
+            {posts.map((post: any, idx: number) => (
+              <div key={post.id} onClick={() => setSelectedPost(post)} className="p-6 cursor-pointer hover:bg-stone-50 transition-colors">
+                <div className="flex justify-between items-start mb-3"><div className="flex items-center gap-3"><img src={IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" /><div><div className="flex items-center gap-1"><span className="font-bold text-sm text-stone-900">{post.username}</span><CheckCircle className="w-3 h-3 text-blue-500" /></div><div className="text-xs text-stone-400">{new Date(post.created_at).toLocaleDateString()}</div></div></div><span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span></div>
+                <p className="text-stone-800 text-sm mb-3 leading-relaxed line-clamp-3">{post.content}</p>
+                {/* Images */} {renderImages(post.images)} 
+                <div className="flex items-center gap-4 mt-3"><button className="flex items-center gap-1 text-stone-500 hover:text-red-500"><Heart className="w-5 h-5" /><span className="text-xs font-medium">{post.likes}</span></button><button className="flex items-center gap-1 text-stone-500"><Share2 className="w-5 h-5" /></button></div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -408,7 +502,7 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
 };
 
 // [TAB 4] Club
-const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops }: any) => {
+const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops, goodsList }: any) => {
   const isGuest = userTier === 'guest';
   return (
     <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
@@ -433,7 +527,7 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
       <div className="mb-10">
         <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><ShoppingBag className="w-5 h-5 text-emerald-600" />Drop Shop</h3>
         <div className="grid grid-cols-3 gap-3">
-          {GOODS.map(item => (
+          {goodsList.map((item: any) => (
             <div key={item.id} className="bg-white border border-stone-200 rounded-2xl p-3 flex flex-col justify-between group cursor-pointer hover:border-emerald-400 transition-colors" onClick={() => spendDrops(item.price, item.name)}>
                <div className="relative aspect-square rounded-xl overflow-hidden mb-2 bg-stone-50"><img src={item.img} className="w-full h-full object-cover" alt={item.name} /><span className="absolute top-1 right-1 bg-black/60 text-white text-[8px] px-1.5 py-0.5 rounded">{item.tag}</span></div>
                <div className="text-xs font-bold text-stone-800 line-clamp-1 mb-1">{item.name}</div>
@@ -482,10 +576,18 @@ export default function ThriveApp() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [communityPosts, setCommunityPosts] = useState<any[]>([]);
   const [meetups, setMeetups] = useState<any[]>([]);
+  
+  // DB Data States
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(FULL_MENU_ITEMS);
+  const [storeList, setStoreList] = useState<any[]>(STORES);
+  const [goodsList, setGoodsList] = useState<GoodsItem[]>(GOODS);
 
   // Cart State (New!)
   const [cart, setCart] = useState<MenuItem[]>([]);
   const [showCart, setShowCart] = useState(false);
+
+  // Feed Detail Modal State (NEW!)
+  const [selectedPost, setSelectedPost] = useState<any>(null);
 
   // Local State for Immediate Interaction
   const [localTier, setLocalTier] = useState<string>('newbie'); 
@@ -500,6 +602,22 @@ export default function ThriveApp() {
   };
 
   useEffect(() => {
+    // Initial Fallback Data with Fixed Images
+    const fallbackMeetups = [
+       { id: 1, title: "Sunday Morning Yoga", type: "Wellness", location: "강남점", meet_time: "Sat 08:00", participants_current: 12, participants_max: 20, img: IMAGES.activity_yoga },
+       { id: 2, title: "Saturday Thrive Run", type: "Activity", location: "광화문", meet_time: "Wed 20:00", participants_current: 8, participants_max: 20, img: IMAGES.activity_run },
+       { id: 3, title: "Wednesday Cooking Group", type: "Activity", location: "더종로R", meet_time: "Mon 19:00", participants_current: 4, participants_max: 8, img: IMAGES.activity_study }
+    ];
+    // New Post with 3 Images (Instagram Style)
+    const fallbackPosts = [
+       { id: 99, username: "JinHyeon Jeon", content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", likes: 42, badge: "Runner", images: ["/feed1.jpg", "/feed2.jpg", "/feed3.jpg"], created_at: new Date().toISOString() },
+       { id: 1, username: "Minji", content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", likes: 12, badge: "Runner", created_at: new Date().toISOString() },
+       { id: 2, username: "Kai", content: "말차 맛있다. 집중력 최고!", likes: 5, badge: "Newbie", created_at: new Date().toISOString() }
+    ];
+    
+    setMeetups(fallbackMeetups);
+    setCommunityPosts(fallbackPosts);
+    
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session) fetchProfile(session.user.id);
@@ -508,7 +626,7 @@ export default function ThriveApp() {
       setSession(session);
       if (session) fetchProfile(session.user.id); else setProfile(null);
     });
-    fetchCommonData();
+    
     return () => subscription.unsubscribe();
   }, []);
 
@@ -518,25 +636,6 @@ export default function ThriveApp() {
         setProfile(data);
         setLocalTier(data.tier);
         setLocalDrops(data.drops);
-    }
-  };
-
-  const fetchCommonData = async () => {
-    const { data: posts } = await supabase.from('thrive_posts').select('*').order('created_at', { ascending: false });
-    if (posts && posts.length > 0) setCommunityPosts(posts);
-    else {
-       setCommunityPosts([
-         { id: 1, username: "Minji", content: "오늘 오운완!", likes: 12, badge: "Runner", created_at: new Date().toISOString() },
-         { id: 2, username: "Kai", content: "말차 맛있다", likes: 5, badge: "Newbie", created_at: new Date().toISOString() }
-       ]);
-    }
-    const { data: meets } = await supabase.from('thrive_meetups').select('*');
-    if (meets && meets.length > 0) setMeetups(meets);
-    else {
-      setMeetups([
-        { id: 1, title: "Saturday Run", type: "Activity", location: "한강공원", meet_time: "Sat 08:00", participants_current: 12, participants_max: 20 },
-        { id: 2, title: "Deep Work", type: "Study", location: "강남점", meet_time: "Wed 19:00", participants_current: 3, participants_max: 8 }
-      ]);
     }
   };
 
@@ -571,12 +670,10 @@ export default function ThriveApp() {
 
   const finalizePayment = async () => {
     if (pendingUpgrade) {
-        // Membership Upgrade Case
         setLocalTier(pendingUpgrade.tier);
         addToast(`멤버십이 ${pendingUpgrade.tier.toUpperCase()} 등급으로 변경되었습니다!`, "success");
         setPendingUpgrade(null);
     } else if (pendingOrder) {
-        // Order Payment Case
         setCart([]); // Clear Cart
         earnDrops(5); // Gamification: Reward
         addToast(`주문이 완료되었습니다! (+5 Drops)`, "success");
@@ -598,7 +695,7 @@ export default function ThriveApp() {
     if (!session) { addToast("로그인이 필요합니다.", "error"); setShowLogin(true); return; }
     const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
     setPendingOrder({ total: totalPrice });
-    setShowPayment(true); // Trigger Payment Modal
+    setShowPayment(true); 
   };
 
   // --- LOGIC: Gamification ---
@@ -630,7 +727,8 @@ export default function ThriveApp() {
     <div className="min-h-screen bg-[#FAFAFA] text-stone-900 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative selection:bg-emerald-200">
       <ToastContainer toasts={toasts} />
       <StarbucksAuthModal isOpen={showLogin} onClose={() => setShowLogin(false)} onLoginSuccess={handleSSOLogin} addToast={addToast} />
-      <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} />
+      <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} stores={storeList} />
+      <FeedDetailModal isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} post={selectedPost} />
       
       {/* New Cart Modal */}
       <CartModal isOpen={showCart} onClose={() => setShowCart(false)} cart={cart} onCheckout={handleCheckout} onRemove={removeFromCart} />
@@ -651,14 +749,14 @@ export default function ThriveApp() {
           <div className="flex flex-col">
             <span className="text-[10px] text-stone-500 leading-none">Current Store</span>
             <div className="flex items-center text-sm font-bold text-stone-800 leading-none">
-              <span className="max-w-[120px] truncate">{currentStore.name}</span>
+              <span className="max-w-[120px] truncate">{currentStore?.name || "매장 선택"}</span>
               <ChevronDown className="w-3 h-3 ml-1 text-stone-400" />
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-           {/* ADDED: Header Cart Icon */}
+           {/* Header Cart Icon */}
            <button onClick={() => setShowCart(true)} className="relative p-2 rounded-full hover:bg-stone-100 transition-colors">
              <ShoppingBag className="w-5 h-5 text-stone-600" />
              {cart.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
@@ -693,9 +791,9 @@ export default function ThriveApp() {
 
       <main className="min-h-[calc(100vh-140px)] bg-white">
         {activeTab === 'home' && <HomeSection setActiveTab={setActiveTab} userTier={currentTier} userName={currentName} onLoginClick={() => setShowLogin(true)} />}
-        {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} />}
-        {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} />}
-        {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} />}
+        {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} items={menuItems} />}
+        {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} setSelectedPost={setSelectedPost} />}
+        {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} />}
       </main>
 
       {/* Floating Bottom Nav */}
