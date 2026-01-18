@@ -50,7 +50,7 @@ type GoodsItem = {
 const IMAGES = {
   hero_main: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1000&auto=format&fit=crop", 
   hero_run: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?q=80&w=800&auto=format&fit=crop", 
-  hero_order: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", 
+  hero_order: "/order.png", 
   activity_yoga: "/yoga.jpg",
   activity_run: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=600&auto=format&fit=crop",
   activity_study: "cooking.jpg",
@@ -350,7 +350,7 @@ const StarbucksAuthModal = ({ isOpen, onClose, onLoginSuccess, addToast }: any) 
       setLoading(false);
       onLoginSuccess(); 
       onClose();
-      addToast("강민지님, 환영합니다!", "success");
+      addToast("스벅이님, 환영합니다!", "success");
     }, 1500);
   };
   if (!isOpen) return null;
@@ -414,7 +414,7 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: an
   const filteredItems = items.filter((item: MenuItem) => item.category === category);
   return (
     <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
-      <SectionHeader title="Health F&B" sub="당신의 컨디션을 위한 맞춤 설계" />
+      <SectionHeader title="Healthy F&B" sub="당신의 컨디션을 위한 맞춤 설계" />
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar">{[{ id: 'drink', label: 'Healthy Drink', icon: <Coffee className="w-4 h-4"/> }, { id: 'food', label: 'Fresh Food', icon: <Utensils className="w-4 h-4"/> }].map(tab => (<button key={tab.id} onClick={() => setCategory(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${category === tab.id ? 'bg-emerald-800 text-white shadow-md' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'}`}>{tab.icon} {tab.label}</button>))}</div>
       <div className="grid gap-6">
         <AnimatePresence mode='popLayout'>
@@ -500,11 +500,14 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
 };
 
 // [TAB 4] Club
-const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops, goodsList }: any) => {
+const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops, goodsList, userName }: any) => {
   const isGuest = userTier === 'guest';
   return (
     <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
-      <SectionHeader title="Young Wellness Club" sub="나에게 딱 맞는 멤버십을 선택하세요" />
+      <SectionHeader 
+        title={isGuest ? "Thrive 멤버십" : <><span className="text-emerald-600">{userName}님</span> 환영합니다!</>} 
+        sub="나에게 딱 맞는 멤버십을 선택하세요" 
+      />
       <div className="bg-gradient-to-br from-stone-900 to-stone-800 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden mb-8 text-left transition-all duration-500 min-h-[180px] flex flex-col justify-center">
         <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500 rounded-full blur-[60px] opacity-20 -mr-10 -mt-10"></div>
         {isGuest ? (
@@ -673,7 +676,7 @@ export default function ThriveApp() {
   const handleSSOLogin = async () => {
     const demoProfile = { 
         id: "demo_user_minji", 
-        username: "강민지", 
+        username: "스벅이", 
         tier: "newbie", 
         tickets: 2, 
         drops: 0 
@@ -816,7 +819,7 @@ export default function ThriveApp() {
         {activeTab === 'home' && <HomeSection setActiveTab={setActiveTab} userTier={currentTier} userName={currentName} onLoginClick={() => setShowLogin(true)} />}
         {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} items={menuItems} />}
         {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} setSelectedPost={setSelectedPost} />}
-        {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} />}
+        {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
       </main>
 
       {/* Floating Bottom Nav */}
