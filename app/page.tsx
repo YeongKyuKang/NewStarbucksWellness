@@ -11,14 +11,14 @@ import {
 } from 'lucide-react';
 
 // -----------------------------------------------------------------------------
-// 0. LOADING SCREEN COMPONENT (Updated: Mobile Aspect Ratio Fix)
+// 0. LOADING SCREEN COMPONENT
 // -----------------------------------------------------------------------------
 
 const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    }, 2500); // 1.5초 유지
+    }, 2500); // 2.5초 유지
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -27,7 +27,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center w-full max-w-md mx-auto overflow-hidden shadow-2xl"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8 }}
       style={{
         background: 'linear-gradient(180deg, #e8f5e9 0%, #66bb6a 45%, #1b5e20 100%)'
       }}
@@ -42,16 +42,15 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
           STARBUCKS
         </motion.h1>
         
-        {/* 나뭇잎 애니메이션: 왼쪽 화면 밖(-100%)에서 중앙(0)으로 */}
         <motion.div
-          initial={{ x: "-100%", rotate: -45, opacity: 0 }} // -100vw 대신 -100% 사용하여 컨테이너 기준 이동
+          initial={{ x: "-100%", rotate: -45, opacity: 0 }}
           animate={{ x: 0, rotate: 0, opacity: 1 }}
           transition={{ 
             type: "spring", 
             stiffness: 30,   
             damping: 15,     
             mass: 1.2,       
-            duration: 1.8 
+            duration: 1.8    
           }}
         >
           <Leaf className="w-24 h-24 text-[#1b5e20] fill-[#1b5e20]" />
@@ -510,7 +509,7 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: an
 };
 
 // [TAB 3] Community
-const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops, setSelectedPost }: any) => {
+const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops, setSelectedPost, onLoginClick, onQuickUpgrade }: any) => {
   const [view, setView] = useState('meetups');
   const isGuest = userTier === 'guest';
   const isFeedLocked = userTier === 'newbie' || isGuest;
@@ -528,6 +527,17 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
               </div>
           )
       }
+      // [NEW] 4 Images Layout (2x2 Grid)
+      if (images.length === 4) {
+          return (
+              <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden h-64">
+                  <img src={images[0]} className="w-full h-32 object-cover" />
+                  <img src={images[1]} className="w-full h-32 object-cover" />
+                  <img src={images[2]} className="w-full h-32 object-cover" />
+                  <img src={images[3]} className="w-full h-32 object-cover" />
+              </div>
+          )
+      }
       return <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden"><img src={images[0]} className="w-full h-40 object-cover" /><img src={images[1]} className="w-full h-40 object-cover" /></div>
   };
 
@@ -542,7 +552,7 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
       )}
       {view === 'feed' && (
         <div className="relative">
-          {isFeedLocked && (<div className="absolute inset-0 z-30 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center h-[500px]"><div className="bg-stone-900 text-white p-4 rounded-full mb-4 shadow-xl"><Lock className="w-8 h-8" /></div><h3 className="text-xl font-bold text-stone-900 mb-2">{isGuest ? "로그인 필요" : "Semipro 멤버 전용"}</h3><p className="text-stone-600 text-sm mb-6">{isGuest ? "커뮤니티를 보려면 로그인해주세요." : "소셜 피드는 Semipro 등급부터 이용 가능합니다."}</p><button onClick={() => addToast(isGuest ? "상단 로그인 버튼을 이용해주세요." : "멤버십 탭에서 업그레이드 가능합니다.", "info")} className="bg-emerald-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg">{isGuest ? "로그인하기" : "업그레이드"}</button></div>)}
+          {isFeedLocked && (<div className="absolute inset-0 z-30 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center h-[500px]"><div className="bg-stone-900 text-white p-4 rounded-full mb-4 shadow-xl"><Lock className="w-8 h-8" /></div><h3 className="text-xl font-bold text-stone-900 mb-2">{isGuest ? "로그인 필요" : "Semipro 멤버 전용"}</h3><p className="text-stone-600 text-sm mb-6">{isGuest ? "커뮤니티를 보려면 로그인해주세요." : "소셜 피드는 Semipro 등급부터 이용 가능합니다."}</p><button onClick={() => { isGuest ? onLoginClick() : onQuickUpgrade() }} className="bg-emerald-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg">{isGuest ? "로그인하기" : "업그레이드"}</button></div>)}
           <div className={`divide-y divide-stone-100 animate-in fade-in duration-300 ${isFeedLocked ? 'blur-sm select-none overflow-hidden h-[500px]' : ''}`}>
             {posts.map((post: any, idx: number) => (
               <div key={post.id} onClick={() => setSelectedPost(post)} className="p-6 cursor-pointer hover:bg-stone-50 transition-colors">
@@ -680,11 +690,12 @@ export default function ThriveApp() {
          content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", 
          likes: 42, 
          badge: "Runner", 
-         images: ["feed1.jpg", "feed2.jpg", "feed3.jpg"], 
+         // [수정] 이미지 4개로 변경 (2x2 Grid 테스트용)
+         images: ["feed1.jpg", "feed4.png", "feed3.jpg", "feed2.jpg"], 
          created_at: new Date().toISOString() 
        },
        { 
-         id: 1, 
+         id: 3, 
          username: "Minji", 
          userImg: "jeon2.jpg",
          content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", 
@@ -693,13 +704,35 @@ export default function ThriveApp() {
          created_at: new Date().toISOString() 
        },
        { 
-         id: 2, 
+         id: 4, 
          username: "Kai", 
          userImg: "jeon3.jpg",
          content: "말차 맛있다. 집중력 최고!", 
          likes: 5, 
          badge: "Newbie", 
          created_at: new Date().toISOString() 
+       },
+       // [추가됨] ID 3: 이미지 1개, 스타벅스 후기
+       {
+         id: 1,
+         username: "Coffee_Lover",
+         userImg: IMAGES.avatar_def,
+         content: "스타벅스 Thrive 매장 분위기 진짜 미쳤다... 🌿 도심 속에서 이런 힐링이라니! 샌드위치도 너무 신선해요.",
+         likes: 28,
+         badge: "Semipro",
+         images: ["/order.png"], 
+         created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString()
+       },
+       // [추가됨] ID 4: 이미지 2개, 스타벅스 후기
+       {
+         id: 2,
+         username: "Yoga_Daily",
+         userImg: IMAGES.avatar_def,
+         content: "오랜만에 친구랑 요가 클래스 듣고 왔어요! 💪 끝나고 마시는 아보카도 스무디는 사랑입니다. 시설도 너무 깔끔하고 좋네요.",
+         likes: 56,
+         badge: "Pro",
+         images: ["/yoga.jpg", "/avocado.png"],
+         created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString()
        }
     ];
     
@@ -885,7 +918,17 @@ export default function ThriveApp() {
         <main className="min-h-[calc(100vh-140px)] bg-white">
           {activeTab === 'home' && <HomeSection setActiveTab={setActiveTab} userTier={currentTier} userName={currentName} onLoginClick={() => setShowLogin(true)} />}
           {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} items={menuItems} />}
-          {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} setSelectedPost={setSelectedPost} />}
+          {activeTab === 'community' && <CommunitySection 
+              posts={communityPosts} 
+              meetups={meetups} 
+              userTier={currentTier} 
+              newbieTickets={currentTickets} 
+              addToast={addToast} 
+              earnDrops={earnDrops} 
+              setSelectedPost={setSelectedPost}
+              onLoginClick={() => setShowLogin(true)} 
+              onQuickUpgrade={() => initiateUpgrade('semipro', 'Wellness Semipro', '₩9,900')} 
+          />}
           {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
         </main>
 
