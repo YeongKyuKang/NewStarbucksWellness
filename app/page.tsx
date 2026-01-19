@@ -727,7 +727,7 @@ export default function ThriveApp() {
        {
          id: 1,
          username: "Coffee_Lover",
-         userImg: IMAGES.avatar_def,
+         userImg: "profile1.png",
          content: "스타벅스 Thrive 매장 분위기 진짜 미쳤다... 🌿 도심 속에서 이런 힐링이라니! 샌드위치도 너무 신선해요.",
          likes: 28,
          badge: "Semipro",
@@ -738,7 +738,7 @@ export default function ThriveApp() {
        {
          id: 2,
          username: "Yoga_Daily",
-         userImg: IMAGES.avatar_def,
+         userImg: "profile2.jpeg",
          content: "오랜만에 친구랑 요가 클래스 듣고 왔어요! 💪 끝나고 마시는 아보카도 스무디는 사랑입니다. 시설도 너무 깔끔하고 좋네요.",
          likes: 56,
          badge: "Pro",
