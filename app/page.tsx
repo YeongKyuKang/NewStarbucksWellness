@@ -11,6 +11,66 @@ import {
 } from 'lucide-react';
 
 // -----------------------------------------------------------------------------
+// 0. LOADING SCREEN COMPONENT (Updated: Mobile Aspect Ratio Fix)
+// -----------------------------------------------------------------------------
+
+const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 2500); // 1.5초 유지
+    return () => clearTimeout(timer);
+  }, [onFinish]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center w-full max-w-md mx-auto overflow-hidden shadow-2xl"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        background: 'linear-gradient(180deg, #e8f5e9 0%, #66bb6a 45%, #1b5e20 100%)'
+      }}
+    >
+      <div className="flex flex-col items-center gap-6">
+        <motion.h1 
+          className="text-3xl font-bold text-[#1b5e20] tracking-[0.2em]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          STARBUCKS
+        </motion.h1>
+        
+        {/* 나뭇잎 애니메이션: 왼쪽 화면 밖(-100%)에서 중앙(0)으로 */}
+        <motion.div
+          initial={{ x: "-100%", rotate: -45, opacity: 0 }} // -100vw 대신 -100% 사용하여 컨테이너 기준 이동
+          animate={{ x: 0, rotate: 0, opacity: 1 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 30,   
+            damping: 15,     
+            mass: 1.2,       
+            duration: 1.8 
+          }}
+        >
+          <Leaf className="w-24 h-24 text-[#1b5e20] fill-[#1b5e20]" />
+        </motion.div>
+
+        <motion.h2 
+          className="text-4xl font-extrabold text-[#1b5e20] tracking-[0.15em]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+        >
+          THRIVE
+        </motion.h2>
+      </div>
+    </motion.div>
+  );
+};
+
+// -----------------------------------------------------------------------------
 // 1. TYPES & INTERFACES
 // -----------------------------------------------------------------------------
 
@@ -561,6 +621,8 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
 // -----------------------------------------------------------------------------
 
 export default function ThriveApp() {
+  const [showSplash, setShowSplash] = useState(true); // New: Splash Screen State
+  
   const [activeTab, setActiveTab] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -750,101 +812,107 @@ export default function ThriveApp() {
   const currentName = profile?.username || "Guest";
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-stone-900 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative selection:bg-emerald-200">
-      <ToastContainer toasts={toasts} />
-      <StarbucksAuthModal isOpen={showLogin} onClose={() => setShowLogin(false)} onLoginSuccess={handleSSOLogin} addToast={addToast} />
-      <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} stores={storeList} />
-      <FeedDetailModal isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} post={selectedPost} />
-      
-      {/* New Cart Modal */}
-      <CartModal isOpen={showCart} onClose={() => setShowCart(false)} cart={cart} onCheckout={handleCheckout} onRemove={removeFromCart} />
-
-      {/* Payment Modal (Unified for Plan & Order) */}
-      <PaymentModal 
-        isOpen={showPayment} 
-        onClose={() => setShowPayment(false)} 
-        planName={pendingUpgrade ? pendingUpgrade.name : `주문 ${cart.length}건`} 
-        price={pendingUpgrade ? pendingUpgrade.price : `₩${(cart.reduce((s,i)=>s+i.price,0)).toLocaleString()}`} 
-        onConfirm={finalizePayment} 
-      />
-      
-      {/* Header */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-1 cursor-pointer hover:bg-stone-50 px-2 py-1 rounded-lg transition-colors" onClick={() => setShowStoreSelector(true)}>
-          <div className="text-emerald-800"><Leaf className="w-5 h-5 fill-current" /></div>
-          <div className="flex flex-col">
-            <span className="text-[10px] text-stone-500 leading-none">Current Store</span>
-            <div className="flex items-center text-sm font-bold text-stone-800 leading-none">
-              <span className="max-w-[120px] truncate">{currentStore?.name || "매장 선택"}</span>
-              <ChevronDown className="w-3 h-3 ml-1 text-stone-400" />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-           {/* Header Cart Icon */}
-           <button onClick={() => setShowCart(true)} className="relative p-2 rounded-full hover:bg-stone-100 transition-colors">
-             <ShoppingBag className="w-5 h-5 text-stone-600" />
-             {cart.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
-           </button>
-
-           {!session ? (
-             <button onClick={() => setShowLogin(true)} className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition-colors">Sign In</button>
-           ) : (
-             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <span className="text-xs font-bold hidden sm:block">{currentName}</span>
-                <img src={IMAGES.avatar_def} className="w-8 h-8 rounded-full border border-emerald-200 object-cover" alt="Profile" />
-             </div>
-           )}
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
+    <>
       <AnimatePresence>
-        {isMenuOpen && (
-           <>
-             {/* Backdrop to close menu when clicking outside */}
-             <div className="fixed inset-0 z-30" onClick={() => setIsMenuOpen(false)}></div>
-             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-14 left-0 w-full bg-white z-40 border-b shadow-lg p-4 flex flex-col gap-2">
-               {['Home', 'Menu', 'Community', 'Club'].map((tab) => (
-                 <button key={tab} onClick={() => { setActiveTab(tab.toLowerCase()); setIsMenuOpen(false); }} className="p-3 text-left font-bold text-stone-600 hover:bg-stone-50 rounded-lg">{tab}</button>
-               ))}
-               {session && <button onClick={handleLogout} className="p-3 text-left font-bold text-red-500 hover:bg-red-50 rounded-lg flex items-center gap-2"><LogOut className="w-4 h-4"/> Logout</button>}
-             </motion.div>
-           </>
-        )}
+        {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
       </AnimatePresence>
 
-      <main className="min-h-[calc(100vh-140px)] bg-white">
-        {activeTab === 'home' && <HomeSection setActiveTab={setActiveTab} userTier={currentTier} userName={currentName} onLoginClick={() => setShowLogin(true)} />}
-        {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} items={menuItems} />}
-        {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} setSelectedPost={setSelectedPost} />}
-        {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
-      </main>
+      <div className="min-h-screen bg-[#FAFAFA] text-stone-900 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative selection:bg-emerald-200">
+        <ToastContainer toasts={toasts} />
+        <StarbucksAuthModal isOpen={showLogin} onClose={() => setShowLogin(false)} onLoginSuccess={handleSSOLogin} addToast={addToast} />
+        <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} stores={storeList} />
+        <FeedDetailModal isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} post={selectedPost} />
+        
+        {/* New Cart Modal */}
+        <CartModal isOpen={showCart} onClose={() => setShowCart(false)} cart={cart} onCheckout={handleCheckout} onRemove={removeFromCart} />
 
-      {/* Floating Bottom Nav */}
-      <div className="fixed bottom-0 w-full max-w-md bg-white border-t border-stone-200 p-2 flex justify-around items-center z-50 pb-safe">
-        {[
-          { id: 'home', icon: <Leaf className="w-5 h-5" />, label: "Home" },
-          { id: 'menu', icon: <Coffee className="w-5 h-5" />, label: "Menu" },
-          { id: 'community', icon: <Users className="w-5 h-5" />, label: "Together" },
-          { id: 'club', icon: <Star className="w-5 h-5" />, label: "Club" },
-        ].map((item) => (
-          <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-colors ${activeTab === item.id ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
-            {item.icon}
-            <span className="text-[10px] font-bold">{item.label}</span>
+        {/* Payment Modal (Unified for Plan & Order) */}
+        <PaymentModal 
+          isOpen={showPayment} 
+          onClose={() => setShowPayment(false)} 
+          planName={pendingUpgrade ? pendingUpgrade.name : `주문 ${cart.length}건`} 
+          price={pendingUpgrade ? pendingUpgrade.price : `₩${(cart.reduce((s,i)=>s+i.price,0)).toLocaleString()}`} 
+          onConfirm={finalizePayment} 
+        />
+        
+        {/* Header */}
+        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-1 cursor-pointer hover:bg-stone-50 px-2 py-1 rounded-lg transition-colors" onClick={() => setShowStoreSelector(true)}>
+            <div className="text-emerald-800"><Leaf className="w-5 h-5 fill-current" /></div>
+            <div className="flex flex-col">
+              <span className="text-[10px] text-stone-500 leading-none">Current Store</span>
+              <div className="flex items-center text-sm font-bold text-stone-800 leading-none">
+                <span className="max-w-[120px] truncate">{currentStore?.name || "매장 선택"}</span>
+                <ChevronDown className="w-3 h-3 ml-1 text-stone-400" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Header Cart Icon */}
+            <button onClick={() => setShowCart(true)} className="relative p-2 rounded-full hover:bg-stone-100 transition-colors">
+              <ShoppingBag className="w-5 h-5 text-stone-600" />
+              {cart.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
+            </button>
+
+            {!session ? (
+              <button onClick={() => setShowLogin(true)} className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition-colors">Sign In</button>
+            ) : (
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                  <span className="text-xs font-bold hidden sm:block">{currentName}</span>
+                  <img src={IMAGES.avatar_def} className="w-8 h-8 rounded-full border border-emerald-200 object-cover" alt="Profile" />
+              </div>
+            )}
+          </div>
+        </nav>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <>
+              {/* Backdrop to close menu when clicking outside */}
+              <div className="fixed inset-0 z-30" onClick={() => setIsMenuOpen(false)}></div>
+              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-14 left-0 w-full bg-white z-40 border-b shadow-lg p-4 flex flex-col gap-2">
+                {['Home', 'Menu', 'Community', 'Club'].map((tab) => (
+                  <button key={tab} onClick={() => { setActiveTab(tab.toLowerCase()); setIsMenuOpen(false); }} className="p-3 text-left font-bold text-stone-600 hover:bg-stone-50 rounded-lg">{tab}</button>
+                ))}
+                {session && <button onClick={handleLogout} className="p-3 text-left font-bold text-red-500 hover:bg-red-50 rounded-lg flex items-center gap-2"><LogOut className="w-4 h-4"/> Logout</button>}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        <main className="min-h-[calc(100vh-140px)] bg-white">
+          {activeTab === 'home' && <HomeSection setActiveTab={setActiveTab} userTier={currentTier} userName={currentName} onLoginClick={() => setShowLogin(true)} />}
+          {activeTab === 'menu' && <MenuSection addToast={addToast} addToCart={addToCart} onLoginRequest={() => setShowLogin(true)} isGuest={!session} items={menuItems} />}
+          {activeTab === 'community' && <CommunitySection posts={communityPosts} meetups={meetups} userTier={currentTier} newbieTickets={currentTickets} addToast={addToast} earnDrops={earnDrops} setSelectedPost={setSelectedPost} />}
+          {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
+        </main>
+
+        {/* Floating Bottom Nav */}
+        <div className="fixed bottom-0 w-full max-w-md bg-white border-t border-stone-200 p-2 flex justify-around items-center z-50 pb-safe">
+          {[
+            { id: 'home', icon: <Leaf className="w-5 h-5" />, label: "Home" },
+            { id: 'menu', icon: <Coffee className="w-5 h-5" />, label: "Menu" },
+            { id: 'community', icon: <Users className="w-5 h-5" />, label: "Together" },
+            { id: 'club', icon: <Star className="w-5 h-5" />, label: "Club" },
+          ].map((item) => (
+            <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-colors ${activeTab === item.id ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
+              {item.icon}
+              <span className="text-[10px] font-bold">{item.label}</span>
+            </button>
+          ))}
+        </div>
+        
+        {/* Order FAB (Cart Trigger) */}
+        <div className="fixed bottom-20 right-4 z-40">
+          <button onClick={() => setShowCart(true)} className="bg-emerald-800 text-white p-3 rounded-full shadow-lg hover:bg-emerald-700 transition-all flex items-center gap-2 relative">
+            <ShoppingBag className="w-5 h-5" />
+            {cart.length > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center">{cart.length}</span>}
           </button>
-        ))}
-      </div>
-      
-      {/* Order FAB (Cart Trigger) */}
-      <div className="fixed bottom-20 right-4 z-40">
-        <button onClick={() => setShowCart(true)} className="bg-emerald-800 text-white p-3 rounded-full shadow-lg hover:bg-emerald-700 transition-all flex items-center gap-2 relative">
-          <ShoppingBag className="w-5 h-5" />
-          {cart.length > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center">{cart.length}</span>}
-        </button>
-      </div>
+        </div>
 
-    </div>
+      </div>
+    </>
   );
 }
