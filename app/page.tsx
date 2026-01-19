@@ -509,7 +509,7 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: an
 };
 
 // [TAB 3] Community
-const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops, setSelectedPost, onLoginClick, onQuickUpgrade }: any) => {
+const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, earnDrops, setSelectedPost, onLoginClick, onQuickUpgrade, onUseTicket }: any) => {
   const [view, setView] = useState('meetups');
   const isGuest = userTier === 'guest';
   const isFeedLocked = userTier === 'newbie' || isGuest;
@@ -547,7 +547,18 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
       {view === 'meetups' && (
         <div className="p-6 space-y-6 animate-in fade-in duration-300">
           {!isGuest && userTier === 'newbie' && (<div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-start gap-3 mb-2"><Ticket className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" /><div><h4 className="font-bold text-emerald-900 text-sm">Newbie 체험권 잔여: {newbieTickets}회</h4><p className="text-xs text-emerald-700 mt-1">{newbieTickets > 0 ? "체험권 소진 후에는 멤버십 업그레이드가 필요합니다." : "체험권 소진. 업그레이드 필요"}</p></div></div>)}
-          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={meetup.img || IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { if(isGuest) addToast("로그인이 필요합니다.", "error"); else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); else if(userTier === 'newbie') addToast("참여 신청 완료! (Newbie는 Drops가 적립되지 않습니다)", "info"); else { addToast("참여 신청 완료! +10 Drops", "success"); earnDrops(10); } }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
+          <div className="space-y-4">{meetups.map((meetup: any, idx: number) => (<div key={meetup.id} className="bg-white border border-stone-200 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow"><div className="h-32 relative"><img src={meetup.img || IMAGES.activity_run} className="absolute inset-0 w-full h-full object-cover" alt="Meetup" /><div className="absolute inset-0 bg-black/40"></div><div className="absolute bottom-3 left-3 text-white"><span className="text-[10px] bg-white/20 backdrop-blur px-2 py-0.5 rounded font-bold uppercase tracking-wider mb-1 inline-block">{meetup.type}</span><h3 className="font-bold text-lg leading-none">{meetup.title}</h3></div></div><div className="p-5"><div className="space-y-2 mb-4"><div className="flex items-center gap-2 text-xs text-stone-600"><Clock className="w-4 h-4 text-emerald-600" /><span>{meetup.meet_time}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><MapPin className="w-4 h-4 text-emerald-600" /><span>{meetup.location}</span></div><div className="flex items-center gap-2 text-xs text-stone-600"><Users className="w-4 h-4 text-emerald-600" /><span>참여 인원 {meetup.participants_current}/{meetup.participants_max}명</span></div></div><button onClick={() => { 
+              if(isGuest) addToast("로그인이 필요합니다.", "error"); 
+              else if(userTier === 'newbie' && newbieTickets <= 0) addToast("체험권이 모두 소진되었습니다.", "error"); 
+              else if(userTier === 'newbie') {
+                  addToast("참여 신청 완료! (Newbie는 Drops가 적립되지 않습니다)", "info"); 
+                  onUseTicket(); 
+              }
+              else { 
+                  addToast("참여 신청 완료! +10 Drops", "success"); 
+                  earnDrops(10); 
+              } 
+          }} className={`w-full py-3 rounded-xl font-bold text-sm transition-colors ${(userTier === 'newbie' && newbieTickets <= 0) || isGuest ? 'bg-stone-200 text-stone-400' : 'bg-emerald-800 text-white hover:bg-emerald-700'}`}>{isGuest ? '로그인 후 참여 가능' : (userTier === 'newbie' && newbieTickets <= 0 ? '멤버십 필요' : '참여 신청하기')}</button></div></div>))}</div>
         </div>
       )}
       {view === 'feed' && (
@@ -839,6 +850,13 @@ export default function ThriveApp() {
     }
   };
 
+  // --- LOGIC: Ticket Usage (NEW) ---
+  const handleUseTicket = () => {
+    if (profile && profile.tickets > 0) {
+      setProfile(prev => prev ? { ...prev, tickets: prev.tickets - 1 } : null);
+    }
+  };
+
   // Derived State
   const currentTier = session ? localTier : 'guest'; 
   const currentTickets = profile?.tickets ?? 2;
@@ -928,6 +946,7 @@ export default function ThriveApp() {
               setSelectedPost={setSelectedPost}
               onLoginClick={() => setShowLogin(true)} 
               onQuickUpgrade={() => initiateUpgrade('semipro', 'Wellness Semipro', '₩9,900')} 
+              onUseTicket={handleUseTicket}
           />}
           {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
         </main>
