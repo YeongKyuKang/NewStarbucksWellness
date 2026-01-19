@@ -7,7 +7,8 @@ import {
   Leaf, Users, Trophy, Coffee, Heart, ArrowRight, Activity, 
   Star, CheckCircle, Menu, X, Share2, MapPin, Clock, Zap, 
   BookOpen, Sun, Crown, Ticket, ShoppingBag, Lock, LogOut, User, ChevronRight, Flame, ChevronLeft,
-  Utensils, Carrot, ChevronDown, AlertCircle, Check, CreditCard, Gift, Store, Trash2, Plus, MessageCircle
+  Utensils, Carrot, ChevronDown, AlertCircle, Check, CreditCard, Gift, Store, Trash2, Plus, MessageCircle,
+  Medal, Sunrise, Droplets
 } from 'lucide-react';
 
 // -----------------------------------------------------------------------------
@@ -102,6 +103,16 @@ type GoodsItem = {
   tag: string;
 };
 
+// [NEW] Badge Type
+type BadgeItem = {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+  unlocked: boolean;
+};
+
 // -----------------------------------------------------------------------------
 // 2. MOCK DATA & ASSETS
 // -----------------------------------------------------------------------------
@@ -155,6 +166,18 @@ const PLANS = [
   { id: 'newbie', name: "Wellness Newbie", price: "Free", color: "bg-stone-100 text-stone-900 border-stone-200", features: ["커뮤니티 2회 체험", "기본 배지 획득", "생일 쿠폰 제공 (커뮤니티 1회 체험권)"], recommended: false },
   { id: 'semipro', name: "Wellness Semipro", price: "₩9,900", color: "bg-emerald-50 text-emerald-900 border-emerald-200", features: ["Drops 활성화","피드 무제한", "활동 무제한", "월 1회 무료 음료"], recommended: true },
   { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 4회 무료 음료", "신메뉴 시음회"], recommended: false }
+];
+
+// [NEW] Mock Badges Data
+const MOCK_BADGES: BadgeItem[] = [
+  { id: 'b1', name: '웰니스 시작', description: '첫 웰니스 음료 구매 시 획득', icon: <Leaf className="w-5 h-5"/>, color: "bg-emerald-500", unlocked: true },
+  { id: 'b2', name: '얼리 버드', description: '오전 8시 이전 매장 방문', icon: <Sunrise className="w-5 h-5"/>, color: "bg-orange-400", unlocked: true },
+  { id: 'b3', name: '수분 충전', description: '일주일 연속 워터 섭취 기록', icon: <Droplets className="w-5 h-5"/>, color: "bg-blue-400", unlocked: true },
+  { id: 'b4', name: '러닝 마스터', description: '러닝 크루 3회 참여', icon: <Activity className="w-5 h-5"/>, color: "bg-red-500", unlocked: false },
+  { id: 'b5', name: '커뮤니티 리더', description: '모임 주최 1회 달성', icon: <Crown className="w-5 h-5"/>, color: "bg-yellow-500", unlocked: false },
+  { id: 'b6', name: '요가 파이어', description: '요가 클래스 5회 참여', icon: <Flame className="w-5 h-5"/>, color: "bg-purple-500", unlocked: false },
+  { id: 'b7', name: '친환경', description: '개인 컵 사용 10회', icon: <Coffee className="w-5 h-5"/>, color: "bg-green-600", unlocked: false },
+  { id: 'b8', name: '소셜 킹', description: '피드 좋아요 100개 달성', icon: <Heart className="w-5 h-5"/>, color: "bg-pink-500", unlocked: false },
 ];
 
 // -----------------------------------------------------------------------------
@@ -216,6 +239,83 @@ const ToastContainer = ({ toasts }: { toasts: any[] }) => {
 // -----------------------------------------------------------------------------
 // 4. MODAL COMPONENTS
 // -----------------------------------------------------------------------------
+
+// [NEW] Badges Modal
+const BadgesModal = ({ isOpen, onClose }: any) => {
+  const [selectedBadge, setSelectedBadge] = useState<BadgeItem | null>(null);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
+      <motion.div 
+        initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white w-full max-w-md h-[80vh] rounded-t-3xl sm:rounded-3xl shadow-2xl relative flex flex-col overflow-hidden"
+      >
+        <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mt-4 mb-4"></div>
+        <div className="px-6 mb-4 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-stone-900">My Badges</h2>
+            <p className="text-stone-500 text-sm">나의 웰니스 여정 기록</p>
+          </div>
+          <div className="text-right">
+            <span className="text-2xl font-bold text-emerald-600">{MOCK_BADGES.filter(b => b.unlocked).length}</span>
+            <span className="text-stone-400 text-sm">/{MOCK_BADGES.length}</span>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+          <div className="grid grid-cols-3 gap-4">
+            {MOCK_BADGES.map((badge) => (
+              <div 
+                key={badge.id} 
+                onClick={() => setSelectedBadge(badge)}
+                className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 p-2 cursor-pointer transition-all border ${badge.unlocked ? 'bg-white border-emerald-100 shadow-sm hover:border-emerald-300' : 'bg-stone-50 border-stone-100 opacity-60'}`}
+              >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md ${badge.unlocked ? badge.color : 'bg-stone-300'}`}>
+                  {badge.unlocked ? badge.icon : <Lock className="w-5 h-5 text-white" />}
+                </div>
+                <span className={`text-[10px] font-bold text-center ${badge.unlocked ? 'text-stone-800' : 'text-stone-400'}`}>
+                  {badge.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Badge Detail Toast inside Modal */}
+        <AnimatePresence>
+          {selectedBadge && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="absolute bottom-6 left-4 right-4 bg-stone-900 text-white p-4 rounded-2xl shadow-xl z-10"
+            >
+              <div className="flex items-start gap-4">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${selectedBadge.unlocked ? selectedBadge.color : 'bg-stone-700'}`}>
+                  {selectedBadge.unlocked ? selectedBadge.icon : <Lock className="w-5 h-5"/>}
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="font-bold">{selectedBadge.name}</h4>
+                    {selectedBadge.unlocked ? 
+                      <span className="text-[10px] bg-emerald-500 px-2 py-0.5 rounded-full">획득함</span> : 
+                      <span className="text-[10px] bg-stone-700 px-2 py-0.5 rounded-full text-stone-400">잠김</span>
+                    }
+                  </div>
+                  <p className="text-xs text-stone-300">{selectedBadge.description}</p>
+                </div>
+                <button onClick={() => setSelectedBadge(null)}><X className="w-4 h-4 text-stone-500" /></button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  );
+};
 
 // Feed Detail Modal
 const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
@@ -581,8 +681,10 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
 };
 
 // [TAB 4] Club
-const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops, goodsList, userName }: any) => {
+const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLoginClick, addToast, spendDrops, goodsList, userName, onShowBadges }: any) => {
   const isGuest = userTier === 'guest';
+  const earnedBadgesCount = MOCK_BADGES.filter(b => b.unlocked).length;
+
   return (
     <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
       <SectionHeader 
@@ -604,6 +706,32 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
           </>
         )}
       </div>
+
+      {/* --- Badges Section [NEW] --- */}
+      {!isGuest && (
+        <div className="mb-10">
+          <SectionHeader title="My Collection" sub="나의 웰니스 여정 기록" linkText="전체보기" onClick={onShowBadges} />
+          <div className="bg-white border border-stone-100 rounded-3xl p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex gap-2">
+                {MOCK_BADGES.filter(b => b.unlocked).slice(0, 3).map((badge) => (
+                  <div key={badge.id} className={`w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm ${badge.color}`}>
+                    {badge.icon}
+                  </div>
+                ))}
+                {earnedBadgesCount === 0 && <span className="text-sm text-stone-400 flex items-center">아직 획득한 배지가 없습니다.</span>}
+              </div>
+              <div className="text-right">
+                <span className="text-lg font-bold text-emerald-700">{earnedBadgesCount}</span>
+                <span className="text-stone-400 text-xs"> / {MOCK_BADGES.length}</span>
+              </div>
+            </div>
+            <div className="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
+              <div className="bg-emerald-500 h-full transition-all duration-1000" style={{ width: `${(earnedBadgesCount / MOCK_BADGES.length) * 100}%` }}></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* --- Drop Shop --- */}
       <div className="mb-10">
@@ -666,12 +794,15 @@ export default function ThriveApp() {
   const [storeList, setStoreList] = useState<any[]>(STORES);
   const [goodsList, setGoodsList] = useState<GoodsItem[]>(GOODS);
 
-  // Cart State (New!)
+  // Cart State
   const [cart, setCart] = useState<MenuItem[]>([]);
   const [showCart, setShowCart] = useState(false);
 
-  // Feed Detail Modal State (NEW!)
+  // Feed Detail Modal State
   const [selectedPost, setSelectedPost] = useState<any>(null);
+
+  // [NEW] Badges Modal State
+  const [showBadges, setShowBadges] = useState(false);
 
   // Local State for Immediate Interaction
   const [localTier, setLocalTier] = useState<string>('newbie'); 
@@ -700,7 +831,7 @@ export default function ThriveApp() {
          userImg: "jeon.jpg",
          content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", 
          likes: 42, 
-         badge: "Runner", 
+         badge: "Pro", 
          // [수정] 이미지 4개로 변경 (2x2 Grid 테스트용)
          images: ["feed1.jpg", "feed4.png", "feed3.jpg", "feed2.jpg"], 
          created_at: new Date().toISOString() 
@@ -711,7 +842,7 @@ export default function ThriveApp() {
          userImg: "jeon2.jpg",
          content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", 
          likes: 12, 
-         badge: "Runner", 
+         badge: "Pro", 
          created_at: new Date().toISOString() 
        },
        { 
@@ -720,7 +851,7 @@ export default function ThriveApp() {
          userImg: "jeon3.jpg",
          content: "말차 맛있다. 집중력 최고!", 
          likes: 5, 
-         badge: "Newbie", 
+         badge: "Semipro", 
          created_at: new Date().toISOString() 
        },
        // [추가됨] ID 3: 이미지 1개, 스타벅스 후기
@@ -873,6 +1004,7 @@ export default function ThriveApp() {
         <StarbucksAuthModal isOpen={showLogin} onClose={() => setShowLogin(false)} onLoginSuccess={handleSSOLogin} addToast={addToast} />
         <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} stores={storeList} />
         <FeedDetailModal isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} post={selectedPost} />
+        <BadgesModal isOpen={showBadges} onClose={() => setShowBadges(false)} />
         
         {/* New Cart Modal */}
         <CartModal isOpen={showCart} onClose={() => setShowCart(false)} cart={cart} onCheckout={handleCheckout} onRemove={removeFromCart} />
@@ -948,7 +1080,20 @@ export default function ThriveApp() {
               onQuickUpgrade={() => initiateUpgrade('semipro', 'Wellness Semipro', '₩9,900')} 
               onUseTicket={handleUseTicket}
           />}
-          {activeTab === 'club' && <ClubSection plans={PLANS} badges={[]} userTier={currentTier} newbieTickets={currentTickets} drops={localDrops} onUpgrade={initiateUpgrade} onLoginClick={() => setShowLogin(true)} addToast={addToast} spendDrops={spendDrops} goodsList={goodsList} userName={currentName} />}
+          {activeTab === 'club' && <ClubSection 
+            plans={PLANS} 
+            badges={[]} 
+            userTier={currentTier} 
+            newbieTickets={currentTickets} 
+            drops={localDrops} 
+            onUpgrade={initiateUpgrade} 
+            onLoginClick={() => setShowLogin(true)} 
+            addToast={addToast} 
+            spendDrops={spendDrops} 
+            goodsList={goodsList} 
+            userName={currentName} 
+            onShowBadges={() => setShowBadges(true)}
+          />}
         </main>
 
         {/* Floating Bottom Nav */}
