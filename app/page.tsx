@@ -27,7 +27,7 @@ const HideScrollbarStyle = () => (
 );
 
 // -----------------------------------------------------------------------------
-// 0. IPHONE 16 PRO FRAME COMPONENT (Realistic Status Bar)
+// 0. IPHONE 16 PRO FRAME COMPONENT (Ultimate Realism)
 // -----------------------------------------------------------------------------
 
 const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
@@ -47,39 +47,44 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         {/* Screen Container */}
         <div className="relative w-full h-full bg-white rounded-[48px] overflow-hidden transform translate-z-0">
             
-            {/* Dynamic Island (Size Adjusted) */}
+            {/* Dynamic Island (Small & Sleek) */}
             <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[90px] h-[28px] bg-black rounded-full z-[9999] pointer-events-none flex items-center justify-center">
                 <div className="w-16 h-full flex items-center justify-end pr-1.5 gap-1.5">
                     <div className="w-1.5 h-1.5 bg-[#1a1a1a] rounded-full opacity-60"></div>
                 </div>
             </div>
 
-            {/* --- REALISTIC STATUS BAR --- */}
+            {/* --- REALISTIC STATUS BAR (z-index increased to 9999) --- */}
             
-            {/* Left Side: Time */}
-            <div className="absolute top-3.5 left-8 z-[50] pointer-events-none text-black flex items-center gap-1.5">
-                <span className="font-semibold text-[14px] tracking-tight">12:55</span>
+            {/* Left: Time & Alarm */}
+            <div className="absolute top-[14px] left-9 z-[9999] pointer-events-none text-black font-semibold text-[14px] tracking-wide select-none flex items-center gap-1.5">
+                <span>06:06</span>
+                {/* Alarm Icon SVG */}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-black opacity-80">
+                   <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
             </div>
 
-            {/* Right Side: Signal, Wifi, Battery */}
-            <div className="absolute top-4 right-7 z-[50] flex items-center gap-1.5 pointer-events-none text-black">
+            {/* Right: Icons (Signal, Wifi, Battery) */}
+            <div className="absolute top-[18px] right-8 z-[9999] flex items-center gap-1.5 pointer-events-none select-none mix-blend-multiply">
+                
                 {/* 1. Cellular Signal (Bars) */}
-                <div className="flex gap-[2px] items-end h-3 mr-0.5">
-                    <div className="w-[3px] h-[4px] bg-black rounded-[1px]"></div>
-                    <div className="w-[3px] h-[6px] bg-black rounded-[1px]"></div>
-                    <div className="w-[3px] h-[8px] bg-black rounded-[1px]"></div>
-                    <div className="w-[3px] h-[10px] bg-black/30 rounded-[1px]"></div> 
-                </div>
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="8" width="3" height="3" rx="1" fill="black"/>
+                    <rect x="5.5" y="5.5" width="3" height="5.5" rx="1" fill="black"/>
+                    <rect x="10" y="3" width="3" height="8" rx="1" fill="black"/>
+                    <rect x="14.5" y="0.5" width="3" height="10.5" rx="1" fill="black" opacity="0.3"/>
+                </svg>
 
-                {/* 2. Wi-Fi Icon */}
-                <Wifi className="w-4 h-4 text-black" strokeWidth={2.5} />
+                {/* 2. Network Type (5G) - REPLACED WIFI with BLACK Color */}
+                <div className="text-[12px] font-bold leading-none mt-[1px] text-black">5G</div>
 
-                {/* 3. Battery Icon */}
-                <div className="w-6 h-3 border-[1.5px] border-black/30 rounded-[4px] relative flex items-center ml-0.5 overflow-hidden">
-                    <div className="absolute inset-0.5 bg-black rounded-[1px] w-[70%]"></div>
+                {/* 3. Battery (Detailed) */}
+                <div className="relative w-[25px] h-[12px]">
+                    <div className="absolute inset-0 rounded-[3px] border-[1px] border-black/40"></div>
+                    <div className="absolute -right-[2px] top-1/2 -translate-y-1/2 w-[2px] h-[4px] bg-black/40 rounded-r-[1px]"></div>
+                    <div className="absolute top-[2px] left-[2px] bottom-[2px] w-[15px] bg-black rounded-[1px]"></div>
                 </div>
-                {/* Battery Tip */}
-                <div className="w-[1.5px] h-1 bg-black/30 rounded-r-[1px] -ml-1"></div>
             </div>
 
             {/* Main App Content */}
@@ -88,7 +93,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
             </div>
 
              {/* Home Indicator */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/80 rounded-full z-[9999] pointer-events-none"></div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-black rounded-full z-[9999] pointer-events-none opacity-90"></div>
         </div>
       </div>
     </div>
@@ -268,6 +273,7 @@ const Badge = ({ children, color = "bg-black", textColor = "text-white" }: any) 
 const SectionHeader = ({ title, sub, linkText, onClick }: any) => (
   <div className="flex justify-between items-end mb-4 px-1">
     <div>
+      {/* [수정] text-xl -> text-2xl, text-xs -> text-sm 로 변경하여 가독성 향상 */}
       <h2 className="text-2xl font-bold text-stone-900 leading-tight">{title}</h2>
       {sub && <p className="text-sm text-stone-500 mt-1">{sub}</p>}
     </div>
@@ -711,15 +717,13 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
   };
 
 return (
-    // 상단 여백 유지 (pt-4)
-    <div className="pb-24 animate-in slide-in-from-right-4 duration-500 relative pt-4">
-      {/* Sticky Header */}
+    // [수정] pt-10 -> pt-4 (MenuSection과 상단 여백 통일)
+    <div className="pb-24 animate-in slide-in-from-right-4 duration-500 relative pt-3">
       <div className="sticky top-[85px] bg-white/95 backdrop-blur z-20 pt-2 border-b border-stone-100 transition-all">
-        {/* [수정] mb-4 -> mb-4 px-6 (Tab 2의 p-6 패딩과 시각적 위치 통일) */}
-        <div className="px-6 mb-4">
-          <h2 className="text-2xl font-bold text-stone-900">Thrive Together</h2>
-          <p className="text-stone-500 text-sm mt-1">함께 성장하는 커뮤니티</p>
+        <div className="px-6"> {/* mb-4는 SectionHeader 안에 포함되어 있으므로 제거 */}
+          <SectionHeader title="Thrive Together" sub="함께 성장하는 커뮤니티" />
         </div>
+
         <div className="flex px-6 gap-6">
           <button onClick={() => setView('meetups')} className={`pb-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-1 ${view === 'meetups' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>모임 & 활동 <Badge color="bg-orange-100" textColor="text-orange-600">New</Badge></button>
           <button onClick={() => setView('feed')} className={`pb-3 text-sm font-bold border-b-2 transition-colors ${view === 'feed' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>소셜 피드</button>
@@ -917,7 +921,7 @@ export default function ThriveApp() {
          content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", 
          likes: 42, 
          badge: "Runner", 
-         images: ["feed1.jpg", "feed2.jpg", "feed3.jpg", "feed1.jpg"], 
+         images: ["feed1.jpg", "feed4.png", "feed3.jpg", "feed2.jpg"], 
          created_at: new Date().toISOString() 
        },
        { 
@@ -941,7 +945,7 @@ export default function ThriveApp() {
        {
          id: 3,
          username: "Coffee_Lover",
-         userImg: IMAGES.avatar_def,
+         userImg: "profile1.png",
          content: "스타벅스 Thrive 매장 분위기 진짜 미쳤다... 🌿 도심 속에서 이런 힐링이라니! 샌드위치도 너무 신선해요.",
          likes: 28,
          badge: "Semipro",
@@ -951,7 +955,7 @@ export default function ThriveApp() {
        {
          id: 4,
          username: "Yoga_Daily",
-         userImg: IMAGES.avatar_def,
+         userImg: "profile2.jpeg",
          content: "오랜만에 친구랑 요가 클래스 듣고 왔어요! 💪 끝나고 마시는 아보카도 스무디는 사랑입니다. 시설도 너무 깔끔하고 좋네요.",
          likes: 56,
          badge: "Pro",
