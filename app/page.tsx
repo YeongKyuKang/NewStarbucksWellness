@@ -32,7 +32,7 @@ const HideScrollbarStyle = () => (
 
 const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen bg-stone-200 flex items-center justify-center p-4 sm:p-8">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 sm:p-8">
       <HideScrollbarStyle />
       
       {/* iPhone Body */}
