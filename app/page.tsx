@@ -8,24 +8,109 @@ import {
   Star, CheckCircle, Menu, X, Share2, MapPin, Clock, Zap, 
   BookOpen, Sun, Crown, Ticket, ShoppingBag, Lock, LogOut, User, ChevronRight, Flame, ChevronLeft,
   Utensils, Carrot, ChevronDown, AlertCircle, Check, CreditCard, Gift, Store, Trash2, Plus, MessageCircle,
-  Medal, Sunrise, Droplets
+  Medal, Sunrise, Droplets, Battery, Wifi // Added Battery, Wifi
 } from 'lucide-react';
 
 // -----------------------------------------------------------------------------
-// 0. LOADING SCREEN COMPONENT
+// [수정 1] 스크롤바 숨김 처리를 위한 Global Style 추가
+// -----------------------------------------------------------------------------
+const HideScrollbarStyle = () => (
+  <style jsx global>{`
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+  `}</style>
+);
+
+// -----------------------------------------------------------------------------
+// 0. IPHONE 16 PRO FRAME COMPONENT (Realistic Status Bar)
+// -----------------------------------------------------------------------------
+
+const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="min-h-screen bg-stone-200 flex items-center justify-center p-4 sm:p-8">
+      <HideScrollbarStyle />
+      
+      {/* iPhone Body */}
+      <div className="relative w-full max-w-[400px] aspect-[9/19.5] bg-[#1a1a1a] rounded-[55px] shadow-[0_0_0_4px_#6b7280,0_20px_50px_-10px_rgba(0,0,0,0.5)] ring-1 ring-white/10 border-[6px] border-[#323232] box-content z-10">
+        
+        {/* Side Buttons */}
+        <div className="absolute top-24 -left-[10px] w-[4px] h-8 bg-[#2a2a2a] rounded-l-md shadow-inner"></div>
+        <div className="absolute top-36 -left-[10px] w-[4px] h-12 bg-[#2a2a2a] rounded-l-md shadow-inner"></div>
+        <div className="absolute top-52 -left-[10px] w-[4px] h-12 bg-[#2a2a2a] rounded-l-md shadow-inner"></div>
+        <div className="absolute top-44 -right-[10px] w-[4px] h-20 bg-[#2a2a2a] rounded-r-md shadow-inner"></div>
+
+        {/* Screen Container */}
+        <div className="relative w-full h-full bg-white rounded-[48px] overflow-hidden transform translate-z-0">
+            
+            {/* Dynamic Island (Size Adjusted) */}
+            <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[90px] h-[28px] bg-black rounded-full z-[9999] pointer-events-none flex items-center justify-center">
+                <div className="w-16 h-full flex items-center justify-end pr-1.5 gap-1.5">
+                    <div className="w-1.5 h-1.5 bg-[#1a1a1a] rounded-full opacity-60"></div>
+                </div>
+            </div>
+
+            {/* --- REALISTIC STATUS BAR --- */}
+            
+            {/* Left Side: Time */}
+            <div className="absolute top-3.5 left-8 z-[50] pointer-events-none text-black flex items-center gap-1.5">
+                <span className="font-semibold text-[14px] tracking-tight">12:55</span>
+            </div>
+
+            {/* Right Side: Signal, Wifi, Battery */}
+            <div className="absolute top-4 right-7 z-[50] flex items-center gap-1.5 pointer-events-none text-black">
+                {/* 1. Cellular Signal (Bars) */}
+                <div className="flex gap-[2px] items-end h-3 mr-0.5">
+                    <div className="w-[3px] h-[4px] bg-black rounded-[1px]"></div>
+                    <div className="w-[3px] h-[6px] bg-black rounded-[1px]"></div>
+                    <div className="w-[3px] h-[8px] bg-black rounded-[1px]"></div>
+                    <div className="w-[3px] h-[10px] bg-black/30 rounded-[1px]"></div> 
+                </div>
+
+                {/* 2. Wi-Fi Icon */}
+                <Wifi className="w-4 h-4 text-black" strokeWidth={2.5} />
+
+                {/* 3. Battery Icon */}
+                <div className="w-6 h-3 border-[1.5px] border-black/30 rounded-[4px] relative flex items-center ml-0.5 overflow-hidden">
+                    <div className="absolute inset-0.5 bg-black rounded-[1px] w-[70%]"></div>
+                </div>
+                {/* Battery Tip */}
+                <div className="w-[1.5px] h-1 bg-black/30 rounded-r-[1px] -ml-1"></div>
+            </div>
+
+            {/* Main App Content */}
+            <div className="w-full h-full overflow-y-auto no-scrollbar bg-[#FAFAFA] pb-6">
+                 {children}
+            </div>
+
+             {/* Home Indicator */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/80 rounded-full z-[9999] pointer-events-none"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// -----------------------------------------------------------------------------
+// 1. SPLASH SCREEN
 // -----------------------------------------------------------------------------
 
 const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    }, 2500); // 2.5초 유지
+    }, 2500); 
     return () => clearTimeout(timer);
   }, [onFinish]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center w-full max-w-md mx-auto overflow-hidden shadow-2xl"
+      className="absolute inset-0 z-[9990] flex flex-col items-center justify-center w-full h-full bg-emerald-600"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
@@ -71,7 +156,7 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 };
 
 // -----------------------------------------------------------------------------
-// 1. TYPES & INTERFACES
+// 2. TYPES & INTERFACES & MOCK DATA
 // -----------------------------------------------------------------------------
 
 type UserProfile = {
@@ -103,7 +188,6 @@ type GoodsItem = {
   tag: string;
 };
 
-// [NEW] Badge Type
 type BadgeItem = {
   id: string;
   name: string;
@@ -112,10 +196,6 @@ type BadgeItem = {
   color: string;
   unlocked: boolean;
 };
-
-// -----------------------------------------------------------------------------
-// 2. MOCK DATA & ASSETS
-// -----------------------------------------------------------------------------
 
 const IMAGES = {
   hero_main: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1000&auto=format&fit=crop", 
@@ -131,22 +211,18 @@ const IMAGES = {
 };
 
 const FULL_MENU_ITEMS: MenuItem[] = [
-  // --- HEALTHY DRINK (6 Items) ---
   { id: 'd1', category: 'drink', name: "말차 포커스 라떼", price: 6000, description: "제주 말차와 L-테아닌의 집중력 부스트", tags: ["Focus"], color_class: "bg-green-100 text-green-800", img: "/matcha.png" },
   { id: 'd2', category: 'drink', name: "아보카도 밸런스 스무디", price: 7200, description: "아보카도와 바나나의 든든한 한 끼", tags: ["Meal"], color_class: "bg-lime-100 text-lime-800", img: "/avocado.png" },
   { id: 'd3', category: 'drink', name: "비니거 리프레시 에이드", price: 6200, description: "상큼한 사과 식초로 되찾는 활력", tags: ["Detox"], color_class: "bg-orange-50 text-orange-800", img: "/vinegar.png" },
   { id: 'd4', category: 'drink', name: "프로틴 부스트 라떼", price: 6500, description: "콜드브루에 단백질 15g을 더하다", tags: ["Protein"], color_class: "bg-blue-100 text-blue-800", img: "/protein-latte.png" },
   { id: 'd5', category: 'drink', name: "레몬 콤부차 에이드", price: 6200, description: "장 건강을 위한 톡 쏘는 발효 음료", tags: ["Healthy"], color_class: "bg-rose-100 text-rose-800", img: "/kombucha.png" },
   { id: 'd6', category: 'drink', name: "ABC 파워 주스", price: 6500, description: "다 섞어 건강하게!", tags: ["Probiotic"], color_class: "bg-rose-100 text-rose-800", img: "/abc-power.png" },
-
-  // --- FRESH FOOD (6 Items) ---
   { id: 'f1', category: 'food', name: "에브리데이 그린볼", price: 8900, description: "수비드 닭가슴살과 퀴노아의 정석", tags: ["Vegetarian"], color_class: "bg-green-50 text-green-800", img: "/green-bowl.png" },
   { id: 'f2', category: 'food', name: "프레쉬 연어 샐러드", price: 10900, description: "오메가3 가득한 생연어 포케", tags: ["Omega 3"], color_class: "bg-orange-50 text-orange-800", img: "/salmon.png" },
   { id: 'f3', category: 'food', name: "바질 치킨 샐러드", price: 9500, description: "향긋한 바질 페스토와 리코타 치즈", tags: ["High-Protein"], color_class: "bg-emerald-50 text-black-800", img: "/basil-chicken.png" },
   { id: 'f4', category: 'food', name: "아보카도 베지 샌드위치", price: 8500, description: "단호박과 에그, 아보카도의 조화", tags: ["Vegetarian"], color_class: "bg-yellow-50 text-yellow-800", img: "/avocado-sandwich.png" },
   { id: 'f5', category: 'food', name: "치킨 클럽 샌드위치", price: 9200, description: "통밀빵에 꽉 채운 닭가슴살과 채소", tags: ["High-Protein"], color_class: "bg-stone-100 text-white-800", img: "/chicken-club.png" },
   { id: 'f6', category: 'food', name: "아사이 파워 볼", price: 8800, description: "항산화 가득 아사이베리와 그래놀라", tags: ["Signature"], color_class: "bg-purple-50 text-purple-800", img: "/acai-bowl.png" },
-  
 ];
 
 const STORES = [
@@ -168,7 +244,6 @@ const PLANS = [
   { id: 'pro', name: "Wellness Pro", price: "₩29,900", color: "bg-stone-900 text-white border-stone-900", features: ["모든 혜택 포함", "월 4회 무료 음료", "신메뉴 시음회"], recommended: false }
 ];
 
-// [NEW] Mock Badges Data
 const MOCK_BADGES: BadgeItem[] = [
   { id: 'b1', name: '웰니스 시작', description: '첫 웰니스 음료 구매 시 획득', icon: <Leaf className="w-5 h-5"/>, color: "bg-emerald-500", unlocked: true },
   { id: 'b2', name: '얼리 버드', description: '오전 8시 이전 매장 방문', icon: <Sunrise className="w-5 h-5"/>, color: "bg-orange-400", unlocked: true },
@@ -193,8 +268,8 @@ const Badge = ({ children, color = "bg-black", textColor = "text-white" }: any) 
 const SectionHeader = ({ title, sub, linkText, onClick }: any) => (
   <div className="flex justify-between items-end mb-4 px-1">
     <div>
-      <h2 className="text-xl font-bold text-stone-900 leading-tight">{title}</h2>
-      {sub && <p className="text-xs text-stone-500 mt-1">{sub}</p>}
+      <h2 className="text-2xl font-bold text-stone-900 leading-tight">{title}</h2>
+      {sub && <p className="text-sm text-stone-500 mt-1">{sub}</p>}
     </div>
     {linkText && (
       <button onClick={onClick} className="text-xs font-bold text-emerald-600 flex items-center hover:underline">
@@ -206,7 +281,7 @@ const SectionHeader = ({ title, sub, linkText, onClick }: any) => (
 
 const ToastContainer = ({ toasts }: { toasts: any[] }) => {
   return (
-    <div className="fixed top-4 left-0 right-0 z-[100] flex flex-col items-center gap-2 pointer-events-none px-4">
+    <div className="absolute top-12 left-0 right-0 z-[100] flex flex-col items-center gap-2 pointer-events-none px-4">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div
@@ -240,14 +315,14 @@ const ToastContainer = ({ toasts }: { toasts: any[] }) => {
 // 4. MODAL COMPONENTS
 // -----------------------------------------------------------------------------
 
-// [NEW] Badges Modal
+// Badges Modal
 const BadgesModal = ({ isOpen, onClose }: any) => {
   const [selectedBadge, setSelectedBadge] = useState<BadgeItem | null>(null);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
+    <div className="absolute inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
       <motion.div 
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         onClick={(e) => e.stopPropagation()}
@@ -274,7 +349,7 @@ const BadgesModal = ({ isOpen, onClose }: any) => {
                 className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 p-2 cursor-pointer transition-all border ${badge.unlocked ? 'bg-white border-emerald-100 shadow-sm hover:border-emerald-300' : 'bg-stone-50 border-stone-100 opacity-60'}`}
               >
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md ${badge.unlocked ? badge.color : 'bg-stone-300'}`}>
-                  {badge.unlocked ? badge.icon : <Lock className="w-5 h-5 text-white" />}
+                  {React.cloneElement(badge.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
                 </div>
                 <span className={`text-[10px] font-bold text-center ${badge.unlocked ? 'text-stone-800' : 'text-stone-400'}`}>
                   {badge.name}
@@ -284,7 +359,6 @@ const BadgesModal = ({ isOpen, onClose }: any) => {
           </div>
         </div>
 
-        {/* Badge Detail Toast inside Modal */}
         <AnimatePresence>
           {selectedBadge && (
             <motion.div 
@@ -295,7 +369,7 @@ const BadgesModal = ({ isOpen, onClose }: any) => {
             >
               <div className="flex items-start gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${selectedBadge.unlocked ? selectedBadge.color : 'bg-stone-700'}`}>
-                  {selectedBadge.unlocked ? selectedBadge.icon : <Lock className="w-5 h-5"/>}
+                  {React.cloneElement(selectedBadge.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-1">
@@ -321,13 +395,12 @@ const BadgesModal = ({ isOpen, onClose }: any) => {
 const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
   if (!isOpen || !post) return null;
   return (
-    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
+    <div className="absolute inset-0 z-[80] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-0 sm:p-4" onClick={onClose}>
       <motion.div 
         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-2xl relative flex flex-col overflow-hidden"
+        className="bg-white w-full h-[90%] sm:h-auto sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-2xl relative flex flex-col overflow-hidden"
       >
-         {/* Header */}
          <div className="p-4 border-b flex justify-between items-center bg-white z-10 shrink-0">
             <div className="flex items-center gap-3">
               <img src={post.userImg || IMAGES.avatar_def} className="w-10 h-10 rounded-full object-cover border border-stone-200" alt="User" />
@@ -339,9 +412,7 @@ const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
             <button onClick={onClose}><X className="text-stone-400 hover:text-stone-800" /></button>
          </div>
 
-         {/* Scrollable Content */}
          <div className="flex-1 overflow-y-auto p-0 scrollbar-hide">
-            {/* Images */}
             {post.images && post.images.length > 0 && (
                <div className="w-full">
                  {post.images.map((img: string, idx: number) => (
@@ -349,21 +420,18 @@ const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
                  ))}
                </div>
             )}
-            {/* Content */}
             <div className="p-5">
                <div className="flex gap-2 mb-3">
                   <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-bold">{post.badge}</span>
                </div>
                <p className="text-stone-800 text-sm leading-relaxed mb-6 whitespace-pre-wrap">{post.content}</p>
 
-               {/* Stats */}
                <div className="flex items-center gap-6 border-t border-stone-100 pt-4">
                   <button className="flex items-center gap-1.5 text-stone-600 hover:text-red-500 transition-colors"><Heart className="w-5 h-5" /><span className="text-sm font-bold">{post.likes}</span></button>
                   <button className="flex items-center gap-1.5 text-stone-600"><MessageCircle className="w-5 h-5" /><span className="text-sm font-bold">12</span></button>
                   <button className="flex items-center gap-1.5 text-stone-600 ml-auto"><Share2 className="w-5 h-5" /></button>
                </div>
 
-               {/* Mock Comments */}
                <div className="mt-6 space-y-4">
                   <h4 className="font-bold text-sm text-stone-900">댓글</h4>
                   <div className="flex gap-3">
@@ -388,12 +456,12 @@ const FeedDetailModal = ({ isOpen, onClose, post }: any) => {
   );
 };
 
-// Store Selector (Bottom Sheet)
+// Store Selector
 const StoreSelector = ({ isOpen, onClose, currentStore, onSelect, stores }: any) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="bg-white w-full max-w-md rounded-t-3xl p-6 pb-10 shadow-2xl relative max-h-[80vh] overflow-y-auto">
+    <div className="absolute inset-0 z-[70] flex items-end justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="bg-white w-full rounded-t-3xl p-6 pb-10 shadow-2xl relative max-h-[80%] overflow-y-auto">
         <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mb-6"></div>
         <div className="flex justify-between items-center mb-6"><h2 className="text-xl font-bold text-stone-900">매장 선택</h2><button onClick={onClose}><X className="text-stone-400" /></button></div>
         <div className="space-y-3">
@@ -409,7 +477,7 @@ const StoreSelector = ({ isOpen, onClose, currentStore, onSelect, stores }: any)
   );
 };
 
-// Payment Simulation Modal
+// Payment Modal
 const PaymentModal = ({ isOpen, onClose, planName, price, onConfirm }: any) => {
   const [processing, setProcessing] = useState(false);
 
@@ -425,8 +493,8 @@ const PaymentModal = ({ isOpen, onClose, planName, price, onConfirm }: any) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-4">
-      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative">
+    <div className="absolute inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in p-4">
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-stone-400"><X /></button>
         {!processing ? (
           <>
@@ -461,8 +529,8 @@ const CartModal = ({ isOpen, onClose, cart, onCheckout, onRemove }: any) => {
   const totalPrice = cart.reduce((sum: number, item: any) => sum + item.price, 0);
 
   return (
-    <div className="fixed inset-0 z-[75] flex items-end justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="bg-white w-full max-w-md rounded-t-3xl p-6 pb-10 shadow-2xl relative max-h-[80vh] overflow-y-auto">
+    <div className="absolute inset-0 z-[75] flex items-end justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="bg-white w-full rounded-t-3xl p-6 pb-10 shadow-2xl relative max-h-[80%] overflow-y-auto">
         <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mb-6"></div>
         <div className="flex justify-between items-center mb-6"><h2 className="text-xl font-bold text-stone-900">장바구니 ({cart.length})</h2><button onClick={onClose}><X className="text-stone-400" /></button></div>
         
@@ -514,8 +582,8 @@ const StarbucksAuthModal = ({ isOpen, onClose, onLoginSuccess, addToast }: any) 
   };
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-8 shadow-2xl relative flex flex-col items-center text-center">
+    <div className="absolute inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="bg-white w-full max-w-xs rounded-t-3xl sm:rounded-3xl p-8 shadow-2xl relative flex flex-col items-center text-center">
         <button onClick={onClose} className="absolute top-6 right-6 text-stone-300 hover:text-stone-800"><X /></button>
         <div className="w-16 h-16 bg-emerald-800 rounded-full flex items-center justify-center mb-6 shadow-lg"><Leaf className="w-8 h-8 text-white" /></div>
         <h2 className="text-2xl font-bold text-stone-900 mb-2">Thrive with Starbucks</h2>
@@ -536,7 +604,8 @@ const StarbucksAuthModal = ({ isOpen, onClose, onLoginSuccess, addToast }: any) 
 const HomeSection = ({ setActiveTab, userTier, userName, onLoginClick }: any) => {
   const isGuest = userTier === 'guest';
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+    // [수정] pt-10 -> pt-4 로 상단 여백 축소 (헤더 높이 증가분 반영)
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 pt-4">
       <div className="bg-stone-900 text-white text-[10px] py-2 overflow-hidden whitespace-nowrap mb-2">
         <motion.div animate={{ x: ["100%", "-100%"] }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }} className="inline-flex items-center gap-8"><span className="flex items-center gap-1"><Flame className="w-3 h-3 text-orange-500" /> 강남점 요가 클래스 마감임박</span><span>•</span><span>신메뉴 '프로틴 쉐이크' 출시 기념 1+1</span><span>•</span><span>이번 주말 한강 러닝 크루 모집 중</span></motion.div>
       </div>
@@ -572,7 +641,8 @@ const MenuSection = ({ addToast, addToCart, onLoginRequest, isGuest, items }: an
   const [category, setCategory] = useState('drink');
   const filteredItems = items.filter((item: MenuItem) => item.category === category);
   return (
-    <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
+    // [수정] pt-14 -> pt-4 로 상단 여백 축소
+    <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500 pt-4">
       <SectionHeader title="Healthy F&B" sub="당신의 컨디션을 위한 맞춤 설계" />
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar">{[{ id: 'drink', label: 'Healthy Drink', icon: <Coffee className="w-4 h-4"/> }, { id: 'food', label: 'Fresh Food', icon: <Utensils className="w-4 h-4"/> }].map(tab => (<button key={tab.id} onClick={() => setCategory(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${category === tab.id ? 'bg-emerald-800 text-white shadow-md' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'}`}>{tab.icon} {tab.label}</button>))}</div>
       <div className="grid gap-6">
@@ -614,7 +684,7 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
   const isGuest = userTier === 'guest';
   const isFeedLocked = userTier === 'newbie' || isGuest;
   
-  // 3-Grid Layout for 3 Images
+  // 3-Grid Layout
   const renderImages = (images: string[]) => {
       if (!images || images.length === 0) return null;
       if (images.length === 1) return <img src={images[0]} className="w-full h-64 object-cover rounded-xl mt-3" />;
@@ -627,7 +697,6 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
               </div>
           )
       }
-      // [NEW] 4 Images Layout (2x2 Grid)
       if (images.length === 4) {
           return (
               <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden h-64">
@@ -641,9 +710,21 @@ const CommunitySection = ({ posts, meetups, userTier, newbieTickets, addToast, e
       return <div className="grid grid-cols-2 gap-1 mt-3 rounded-xl overflow-hidden"><img src={images[0]} className="w-full h-40 object-cover" /><img src={images[1]} className="w-full h-40 object-cover" /></div>
   };
 
-  return (
-    <div className="pb-24 animate-in slide-in-from-right-4 duration-500 relative">
-      <div className="sticky top-0 bg-white/95 backdrop-blur z-20 pt-4 border-b border-stone-100"><div className="px-6 mb-4"><h2 className="text-2xl font-bold text-stone-900">Thrive Together</h2><p className="text-stone-500 text-sm">함께 성장하는 커뮤니티</p></div><div className="flex px-6 gap-6"><button onClick={() => setView('meetups')} className={`pb-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-1 ${view === 'meetups' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>모임 & 활동 <Badge color="bg-orange-100" textColor="text-orange-600">New</Badge></button><button onClick={() => setView('feed')} className={`pb-3 text-sm font-bold border-b-2 transition-colors ${view === 'feed' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>소셜 피드</button></div></div>
+return (
+    // 상단 여백 유지 (pt-4)
+    <div className="pb-24 animate-in slide-in-from-right-4 duration-500 relative pt-4">
+      {/* Sticky Header */}
+      <div className="sticky top-[85px] bg-white/95 backdrop-blur z-20 pt-2 border-b border-stone-100 transition-all">
+        {/* [수정] mb-4 -> mb-4 px-6 (Tab 2의 p-6 패딩과 시각적 위치 통일) */}
+        <div className="px-6 mb-4">
+          <h2 className="text-2xl font-bold text-stone-900">Thrive Together</h2>
+          <p className="text-stone-500 text-sm mt-1">함께 성장하는 커뮤니티</p>
+        </div>
+        <div className="flex px-6 gap-6">
+          <button onClick={() => setView('meetups')} className={`pb-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-1 ${view === 'meetups' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>모임 & 활동 <Badge color="bg-orange-100" textColor="text-orange-600">New</Badge></button>
+          <button onClick={() => setView('feed')} className={`pb-3 text-sm font-bold border-b-2 transition-colors ${view === 'feed' ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-stone-400'}`}>소셜 피드</button>
+        </div>
+      </div>
       {view === 'meetups' && (
         <div className="p-6 space-y-6 animate-in fade-in duration-300">
           {!isGuest && userTier === 'newbie' && (<div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-start gap-3 mb-2"><Ticket className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" /><div><h4 className="font-bold text-emerald-900 text-sm">Newbie 체험권 잔여: {newbieTickets}회</h4><p className="text-xs text-emerald-700 mt-1">{newbieTickets > 0 ? "체험권 소진 후에는 멤버십 업그레이드가 필요합니다." : "체험권 소진. 업그레이드 필요"}</p></div></div>)}
@@ -686,7 +767,8 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
   const earnedBadgesCount = MOCK_BADGES.filter(b => b.unlocked).length;
 
   return (
-    <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500">
+    // [수정] pt-14 -> pt-4 로 상단 여백 축소
+    <div className="p-6 pb-24 animate-in slide-in-from-right-4 duration-500 pt-4">
       <SectionHeader 
         title={isGuest ? "Thrive 멤버십" : <><span className="text-emerald-600">{userName}님</span> 환영합니다!</>} 
         sub="나에게 딱 맞는 멤버십을 선택하세요" 
@@ -707,31 +789,37 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
         )}
       </div>
 
-      {/* --- Badges Section [NEW] --- */}
-      {!isGuest && (
-        <div className="mb-10">
-          <SectionHeader title="My Collection" sub="나의 웰니스 여정 기록" linkText="전체보기" onClick={onShowBadges} />
-          <div className="bg-white border border-stone-100 rounded-3xl p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2">
-                {MOCK_BADGES.filter(b => b.unlocked).slice(0, 3).map((badge) => (
-                  <div key={badge.id} className={`w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm ${badge.color}`}>
-                    {badge.icon}
-                  </div>
-                ))}
-                {earnedBadgesCount === 0 && <span className="text-sm text-stone-400 flex items-center">아직 획득한 배지가 없습니다.</span>}
-              </div>
-              <div className="text-right">
-                <span className="text-lg font-bold text-emerald-700">{earnedBadgesCount}</span>
-                <span className="text-stone-400 text-xs"> / {MOCK_BADGES.length}</span>
-              </div>
+      {/* --- Badges Section --- */}
+      <div className="mb-10">
+        <SectionHeader title="My Badges" sub="나의 웰니스 기록" linkText="전체보기" onClick={onShowBadges} />
+        <div 
+            onClick={onShowBadges}
+            className="bg-white border border-stone-200 rounded-3xl p-5 flex items-center justify-between cursor-pointer hover:border-emerald-400 transition-colors shadow-sm"
+        >
+            <div className="flex items-center gap-3">
+                <div className="flex -space-x-3">
+                    {/* 획득한 뱃지 앞 3개만 미리보기 */}
+                    {MOCK_BADGES.filter(b => b.unlocked).slice(0, 3).map((badge) => (
+                        <div key={badge.id} className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-white shadow-sm ${badge.color}`}>
+                            {React.cloneElement(badge.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
+                        </div>
+                    ))}
+                    {earnedBadgesCount === 0 && (
+                        <div className="w-10 h-10 rounded-full border-2 border-white bg-stone-200 flex items-center justify-center text-stone-400">
+                           <Lock className="w-4 h-4"/>
+                        </div>
+                    )}
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-sm font-bold text-stone-800">
+                        {earnedBadgesCount > 0 ? `${earnedBadgesCount}개의 뱃지 획득` : "아직 뱃지가 없어요"}
+                    </span>
+                    <span className="text-xs text-stone-400">계속해서 도전해보세요!</span>
+                </div>
             </div>
-            <div className="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
-              <div className="bg-emerald-500 h-full transition-all duration-1000" style={{ width: `${(earnedBadgesCount / MOCK_BADGES.length) * 100}%` }}></div>
-            </div>
-          </div>
+            <ChevronRight className="w-5 h-5 text-stone-400" />
         </div>
-      )}
+      </div>
 
       {/* --- Drop Shop --- */}
       <div className="mb-10">
@@ -770,7 +858,7 @@ const ClubSection = ({ plans, userTier, newbieTickets, drops, onUpgrade, onLogin
 // -----------------------------------------------------------------------------
 
 export default function ThriveApp() {
-  const [showSplash, setShowSplash] = useState(true); // New: Splash Screen State
+  const [showSplash, setShowSplash] = useState(true); 
   
   const [activeTab, setActiveTab] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -778,37 +866,36 @@ export default function ThriveApp() {
   const [showStoreSelector, setShowStoreSelector] = useState(false);
   const [currentStore, setCurrentStore] = useState(STORES[0]);
   
-  // Payment Modal State
   const [showPayment, setShowPayment] = useState(false);
   const [pendingUpgrade, setPendingUpgrade] = useState<{tier:string, name:string, price:string} | null>(null);
-  const [pendingOrder, setPendingOrder] = useState<any>(null); // For Cart Payment
+  const [pendingOrder, setPendingOrder] = useState<any>(null); 
 
-  // Data States
-  const [session, setSession] = useState<any>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const DEMO_USER = { 
+    id: "demo_user_minji", 
+    username: "스벅이", 
+    tier: "newbie" as const, 
+    tickets: 2, 
+    drops: 0 
+  };
+
+  const [session, setSession] = useState<any>({ user: { id: DEMO_USER.id } }); 
+  const [profile, setProfile] = useState<UserProfile | null>(DEMO_USER); 
+  const [localTier, setLocalTier] = useState<string>('newbie'); 
+  const [localDrops, setLocalDrops] = useState<number>(0);
+
   const [communityPosts, setCommunityPosts] = useState<any[]>([]);
   const [meetups, setMeetups] = useState<any[]>([]);
   
-  // DB Data States
   const [menuItems, setMenuItems] = useState<MenuItem[]>(FULL_MENU_ITEMS);
   const [storeList, setStoreList] = useState<any[]>(STORES);
   const [goodsList, setGoodsList] = useState<GoodsItem[]>(GOODS);
 
-  // Cart State
   const [cart, setCart] = useState<MenuItem[]>([]);
   const [showCart, setShowCart] = useState(false);
 
-  // Feed Detail Modal State
   const [selectedPost, setSelectedPost] = useState<any>(null);
-
-  // [NEW] Badges Modal State
   const [showBadges, setShowBadges] = useState(false);
 
-  // Local State for Immediate Interaction
-  const [localTier, setLocalTier] = useState<string>('newbie'); 
-  const [localDrops, setLocalDrops] = useState<number>(0);
-
-  // Toast System
   const [toasts, setToasts] = useState<{id: number, message: string, type: ToastType}[]>([]);
   const addToast = (message: string, type: ToastType = 'info') => {
     const id = Date.now();
@@ -817,13 +904,11 @@ export default function ThriveApp() {
   };
 
   useEffect(() => {
-    // Initial Fallback Data with Fixed Images
     const fallbackMeetups = [
        { id: 1, title: "Saturday Morning Yoga", type: "Wellness", location: "강남점", meet_time: "Sat 08:00", participants_current: 12, participants_max: 20, img: IMAGES.activity_yoga },
        { id: 2, title: "Wednesday Thrive Run", type: "Activity", location: "광화문", meet_time: "Wed 20:00", participants_current: 8, participants_max: 20, img: IMAGES.activity_run },
        { id: 3, title: "Wednesday Cooking Group", type: "Activity", location: "더명동R", meet_time: "Wed 19:00", participants_current: 4, participants_max: 8, img: IMAGES.activity_study }
     ];
-    // New Post with 3 Images (Instagram Style) & Custom User Profile Images
     const fallbackPosts = [
        { 
          id: 99, 
@@ -831,45 +916,42 @@ export default function ThriveApp() {
          userImg: "jeon.jpg",
          content: "주말 러닝 끝나고 브런치! 날씨가 너무 좋아서 사진 왕창 찍음 📸\n\n#Thrive #Running #Brunch #WeekendVibes", 
          likes: 42, 
-         badge: "Pro", 
-         // [수정] 이미지 4개로 변경 (2x2 Grid 테스트용)
-         images: ["feed1.jpg", "feed4.png", "feed3.jpg", "feed2.jpg"], 
+         badge: "Runner", 
+         images: ["feed1.jpg", "feed2.jpg", "feed3.jpg", "feed1.jpg"], 
          created_at: new Date().toISOString() 
        },
        { 
-         id: 3, 
+         id: 1, 
          username: "Minji", 
          userImg: "jeon2.jpg",
          content: "오늘 오운완! 역시 운동 후엔 프로틴이지 💪", 
          likes: 12, 
-         badge: "Pro", 
+         badge: "Runner", 
          created_at: new Date().toISOString() 
        },
        { 
-         id: 4, 
+         id: 2, 
          username: "Kai", 
          userImg: "jeon3.jpg",
          content: "말차 맛있다. 집중력 최고!", 
          likes: 5, 
-         badge: "Semipro", 
+         badge: "Newbie", 
          created_at: new Date().toISOString() 
        },
-       // [추가됨] ID 3: 이미지 1개, 스타벅스 후기
        {
-         id: 1,
+         id: 3,
          username: "Coffee_Lover",
-         userImg: "profile1.png",
+         userImg: IMAGES.avatar_def,
          content: "스타벅스 Thrive 매장 분위기 진짜 미쳤다... 🌿 도심 속에서 이런 힐링이라니! 샌드위치도 너무 신선해요.",
          likes: 28,
          badge: "Semipro",
          images: ["/order.png"], 
          created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString()
        },
-       // [추가됨] ID 4: 이미지 2개, 스타벅스 후기
        {
-         id: 2,
+         id: 4,
          username: "Yoga_Daily",
-         userImg: "profile2.jpeg",
+         userImg: IMAGES.avatar_def,
          content: "오랜만에 친구랑 요가 클래스 듣고 왔어요! 💪 끝나고 마시는 아보카도 스무디는 사랑입니다. 시설도 너무 깔끔하고 좋네요.",
          likes: 56,
          badge: "Pro",
@@ -880,27 +962,7 @@ export default function ThriveApp() {
     
     setMeetups(fallbackMeetups);
     setCommunityPosts(fallbackPosts);
-    
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) fetchProfile(session.user.id);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) fetchProfile(session.user.id); else setProfile(null);
-    });
-    
-    return () => subscription.unsubscribe();
   }, []);
-
-  const fetchProfile = async (userId: string) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single();
-    if (data) {
-        setProfile(data);
-        setLocalTier(data.tier);
-        setLocalDrops(data.drops);
-    }
-  };
 
   const handleLogout = async () => { 
     await supabase.auth.signOut(); 
@@ -914,7 +976,7 @@ export default function ThriveApp() {
     const demoProfile = { 
         id: "demo_user_minji", 
         username: "스벅이", 
-        tier: "newbie", 
+        tier: "newbie" as const, 
         tickets: 2, 
         drops: 0 
     };
@@ -924,7 +986,6 @@ export default function ThriveApp() {
     setLocalDrops(0);
   };
 
-  // --- LOGIC: Payment & Upgrade ---
   const initiateUpgrade = (newTier: string, name: string, price: string) => {
     if (newTier === localTier) return;
     setPendingUpgrade({ tier: newTier, name, price });
@@ -937,15 +998,14 @@ export default function ThriveApp() {
         addToast(`멤버십이 ${pendingUpgrade.tier.toUpperCase()} 등급으로 변경되었습니다!`, "success");
         setPendingUpgrade(null);
     } else if (pendingOrder) {
-        setCart([]); // Clear Cart
-        earnDrops(5); // Gamification: Reward
+        setCart([]); 
+        earnDrops(5); 
         addToast(`주문이 완료되었습니다! (+5 Drops)`, "success");
         setPendingOrder(null);
         setShowCart(false);
     }
   };
 
-  // --- LOGIC: Cart & Order ---
   const addToCart = (item: MenuItem) => {
     setCart(prev => [...prev, item]);
   };
@@ -961,11 +1021,9 @@ export default function ThriveApp() {
     setShowPayment(true); 
   };
 
-  // --- LOGIC: Gamification ---
   const earnDrops = (amount: number) => {
     if (!session) return;
     if (localTier === 'newbie') {
-       // Note: Toast handled in specific actions to be context-aware
        return;
     }
     setLocalDrops(prev => prev + amount);
@@ -981,35 +1039,30 @@ export default function ThriveApp() {
     }
   };
 
-  // --- LOGIC: Ticket Usage (NEW) ---
   const handleUseTicket = () => {
     if (profile && profile.tickets > 0) {
       setProfile(prev => prev ? { ...prev, tickets: prev.tickets - 1 } : null);
     }
   };
 
-  // Derived State
   const currentTier = session ? localTier : 'guest'; 
   const currentTickets = profile?.tickets ?? 2;
   const currentName = profile?.username || "Guest";
 
   return (
-    <>
+    <PhoneFrame>
       <AnimatePresence>
         {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-[#FAFAFA] text-stone-900 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative selection:bg-emerald-200">
+      <div className="bg-[#FAFAFA] text-stone-900 font-sans min-h-full">
         <ToastContainer toasts={toasts} />
         <StarbucksAuthModal isOpen={showLogin} onClose={() => setShowLogin(false)} onLoginSuccess={handleSSOLogin} addToast={addToast} />
         <StoreSelector isOpen={showStoreSelector} onClose={() => setShowStoreSelector(false)} currentStore={currentStore} onSelect={setCurrentStore} stores={storeList} />
         <FeedDetailModal isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} post={selectedPost} />
         <BadgesModal isOpen={showBadges} onClose={() => setShowBadges(false)} />
-        
-        {/* New Cart Modal */}
         <CartModal isOpen={showCart} onClose={() => setShowCart(false)} cart={cart} onCheckout={handleCheckout} onRemove={removeFromCart} />
 
-        {/* Payment Modal (Unified for Plan & Order) */}
         <PaymentModal 
           isOpen={showPayment} 
           onClose={() => setShowPayment(false)} 
@@ -1018,8 +1071,8 @@ export default function ThriveApp() {
           onConfirm={finalizePayment} 
         />
         
-        {/* Header */}
-        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-4 h-14 flex items-center justify-between">
+        {/* [수정] Header Style: Taller padding to clear status bar */}
+        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-4 pt-14 pb-2 flex items-center justify-between">
           <div className="flex items-center gap-1 cursor-pointer hover:bg-stone-50 px-2 py-1 rounded-lg transition-colors" onClick={() => setShowStoreSelector(true)}>
             <div className="text-emerald-800"><Leaf className="w-5 h-5 fill-current" /></div>
             <div className="flex flex-col">
@@ -1032,7 +1085,6 @@ export default function ThriveApp() {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Header Cart Icon */}
             <button onClick={() => setShowCart(true)} className="relative p-2 rounded-full hover:bg-stone-100 transition-colors">
               <ShoppingBag className="w-5 h-5 text-stone-600" />
               {cart.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
@@ -1053,7 +1105,6 @@ export default function ThriveApp() {
         <AnimatePresence>
           {isMenuOpen && (
             <>
-              {/* Backdrop to close menu when clicking outside */}
               <div className="fixed inset-0 z-30" onClick={() => setIsMenuOpen(false)}></div>
               <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-14 left-0 w-full bg-white z-40 border-b shadow-lg p-4 flex flex-col gap-2">
                 {['Home', 'Menu', 'Community', 'Club'].map((tab) => (
@@ -1096,7 +1147,6 @@ export default function ThriveApp() {
           />}
         </main>
 
-        {/* Floating Bottom Nav */}
         <div className="fixed bottom-0 w-full max-w-md bg-white border-t border-stone-200 p-2 flex justify-around items-center z-50 pb-safe">
           {[
             { id: 'home', icon: <Leaf className="w-5 h-5" />, label: "Home" },
@@ -1111,7 +1161,6 @@ export default function ThriveApp() {
           ))}
         </div>
         
-        {/* Order FAB (Cart Trigger) */}
         <div className="fixed bottom-20 right-4 z-40">
           <button onClick={() => setShowCart(true)} className="bg-emerald-800 text-white p-3 rounded-full shadow-lg hover:bg-emerald-700 transition-all flex items-center gap-2 relative">
             <ShoppingBag className="w-5 h-5" />
@@ -1120,6 +1169,6 @@ export default function ThriveApp() {
         </div>
 
       </div>
-    </>
+    </PhoneFrame>
   );
 }
